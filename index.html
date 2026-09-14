@@ -57,17 +57,20 @@
         .user-info label {
             display: block;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             color: var(--secondary-color);
         }
 
-        .user-info input {
+        .user-info select {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ccc;
             border-radius: 6px;
             font-size: 1rem;
             box-sizing: border-box;
+            background-color: #fff;
+            color: var(--text-color);
+            cursor: pointer;
         }
 
         .question-card {
@@ -143,12 +146,34 @@
 
 <div class="container">
     <h1>Kuis Past Perfect Tense</h1>
-    <p class="subtitle">Jawab 10 soal berikut, lalu kirimkan hasilnya via WhatsApp!</p>
+    <p class="subtitle">Pilih nama kamu, jawab 10 soal berikut, lalu kirim hasilnya via WhatsApp!</p>
 
     <form id="quizForm">
         <div class="user-info">
-            <label for="userName">Nama Lengkap / Nama Panggilan:</label>
-            <input type="text" id="userName" placeholder="Masukkan nama kamu di sini..." required>
+            <label for="userName">Pilih Nama Kamu:</label>
+            <select id="userName" required>
+                <option value="" disabled selected>-- Pilih Nama dari Daftar --</option>
+                <option value="Adzanta Anandapa Rusata">Adzanta Anandapa Rusata</option>
+                <option value="Akram Arrosyid">Akram Arrosyid</option>
+                <option value="Al Fathir Yugi Pratama">Al Fathir Yugi Pratama</option>
+                <option value="Anandha putra Bianka">Anandha putra Bianka</option>
+                <option value="Ar Rasyid Prakasa Pratama">Ar Rasyid Prakasa Pratama</option>
+                <option value="Arian Bimo Hidayat">Arian Bimo Hidayat</option>
+                <option value="Arkana Abdad Abbasyi">Arkana Abdad Abbasyi</option>
+                <option value="Arya wira hadiputra">Arya wira hadiputra</option>
+                <option value="Attar Farras Bardend Ropen">Attar Farras Bardend Ropen</option>
+                <option value="Hafizh Izzan Ardi Putra">Hafizh Izzan Ardi Putra</option>
+                <option value="Hamzah Aufaa Ibrahim">Hamzah Aufaa Ibrahim</option>
+                <option value="Ikbar Qaisar Arfarassyidan">Ikbar Qaisar Arfarassyidan</option>
+                <option value="Keanu Ibrahim Al Faris">Keanu Ibrahim Al Faris</option>
+                <option value="Moch Abdul Malik Arasyid">Moch Abdul Malik Arasyid</option>
+                <option value="Muhammad Alif alhafidz">Muhammad Alif alhafidz</option>
+                <option value="Muhammad Aysar Rizqin">Muhammad Aysar Rizqin</option>
+                <option value="Muhammad Taqiyyurohman Alfawwaz">Muhammad Taqiyyurohman Alfawwaz</option>
+                <option value="Nararya Irsyad Kelana">Nararya Irsyad Kelana</option>
+                <option value="Rafael Rayhan Hafidz">Rafael Rayhan Hafidz</option>
+                <option value="Rafandra Aqlan Lazuardi">Rafandra Aqlan Lazuardi</option>
+            </select>
         </div>
 
         <!-- Soal 1 -->
@@ -271,9 +296,9 @@
     document.getElementById('quizForm').addEventListener('submit', function(e) {
         e.preventDefault();
 
-        const name = document.getElementById('userName').value.trim();
+        const name = document.getElementById('userName').value;
         if(!name) {
-            alert('Silakan isi nama kamu terlebih dahulu!');
+            alert('Silakan pilih nama kamu terlebih dahulu!');
             return;
         }
 
@@ -307,7 +332,7 @@
             message += `${i}. ${answers[`Soal ${i}`]}\n`;
         }
 
-        const phoneNumber = "628811078080"; // 08811078080 -> 628811078080
+        const phoneNumber = "628811078080";
         const encodedMessage = encodeURIComponent(message);
         const waUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
 
