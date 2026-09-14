@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Past Perfect Tense</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #2c3e50;
+            --success-color: #2ecc71;
+            --background-color: #f4f7f6;
+            --card-background: #ffffff;
+            --text-color: #333333;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: var(--card-background);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--secondary-color);
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+        }
+
+        .user-info {
+            background-color: #eef5fc;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .user-info label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--secondary-color);
+        }
+
+        .user-info input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .question-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            padding: 18px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: border-color 0.2s;
+        }
+
+        .question-card:hover {
+            border-color: var(--primary-color);
+        }
+
+        .question-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--secondary-color);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 10px 14px;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: #f8f9fa;
+        }
+
+        .option-label input {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background-color: #25D366;
+            color: white;
+            padding: 14px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .submit-btn:hover {
+            background-color: #1eb857;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Kuis Past Perfect Tense</h1>
+    <p class="subtitle">Jawab 10 soal berikut, lalu kirimkan hasilnya via WhatsApp!</p>
+
+    <form id="quizForm">
+        <div class="user-info">
+            <label for="userName">Nama Lengkap / Nama Panggilan:</label>
+            <input type="text" id="userName" placeholder="Masukkan nama kamu di sini..." required>
+        </div>
+
+        <!-- Soal 1 -->
+        <div class="question-card">
+            <div class="question-title">1. By the time I arrived, they _____ (leave).</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q1" value="A" required> A. have left</label>
+                <label class="option-label"><input type="radio" name="q1" value="B"> B. had left</label>
+                <label class="option-label"><input type="radio" name="q1" value="C"> C. has leave</label>
+                <label class="option-label"><input type="radio" name="q1" value="D"> D. is leaving</label>
+            </div>
+        </div>
+
+        <!-- Soal 2 -->
+        <div class="question-card">
+            <div class="question-title">2. She was tired because she _____ (not sleep) well.</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q2" value="A" required> A. had not slept</label>
+                <label class="option-label"><input type="radio" name="q2" value="B"> B. has not sleep</label>
+                <label class="option-label"><input type="radio" name="q2" value="C"> C. is not sleeping</label>
+                <label class="option-label"><input type="radio" name="q2" value="D"> D. was not sleep</label>
+            </div>
+        </div>
+
+        <!-- Soal 3 -->
+        <div class="question-card">
+            <div class="question-title">3. We _____ (finish) dinner before the guests came.</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q3" value="A" required> A. finish</label>
+                <label class="option-label"><input type="radio" name="q3" value="B"> B. has finished</label>
+                <label class="option-label"><input type="radio" name="q3" value="C"> C. had finished</label>
+                <label class="option-label"><input type="radio" name="q3" value="D"> D. are finishing</label>
+            </div>
+        </div>
+
+        <!-- Soal 4 -->
+        <div class="question-card">
+            <div class="question-title">4. The film _____ (start) when he entered the cinema.</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q4" value="A" required> A. had started</label>
+                <label class="option-label"><input type="radio" name="q4" value="B"> B. starting</label>
+                <label class="option-label"><input type="radio" name="q4" value="C"> C. has start</label>
+                <label class="option-label"><input type="radio" name="q4" value="D"> D. started</label>
+            </div>
+        </div>
+
+        <!-- Soal 5 -->
+        <div class="question-card">
+            <div class="question-title">5. Rumus umum untuk bentuk Positif Past Perfect Tense adalah...</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q5" value="A" required> A. Subject + Has + V2</label>
+                <label class="option-label"><input type="radio" name="q5" value="B"> B. Subject + Had + V3</label>
+                <label class="option-label"><input type="radio" name="q5" value="C"> C. Subject + Is + V-ing</label>
+                <label class="option-label"><input type="radio" name="q5" value="D"> D. Subject + Have + V1</label>
+            </div>
+        </div>
+
+        <!-- Soal 6 -->
+        <div class="question-card">
+            <div class="question-title">6. When I called her, she _____ (go) out.</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q6" value="A" required> A. had gone</label>
+                <label class="option-label"><input type="radio" name="q6" value="B"> B. had went</label>
+                <label class="option-label"><input type="radio" name="q6" value="C"> C. has go</label>
+                <label class="option-label"><input type="radio" name="q6" value="D"> D. was went</label>
+            </div>
+        </div>
+
+        <!-- Soal 7 -->
+        <div class="question-card">
+            <div class="question-title">7. I had eaten dinner _____ I watched TV.</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q7" value="A" required> A. after</label>
+                <label class="option-label"><input type="radio" name="q7" value="B"> B. before</label>
+                <label class="option-label"><input type="radio" name="q7" value="C"> C. while</label>
+                <label class="option-label"><input type="radio" name="q7" value="D"> D. because</label>
+            </div>
+        </div>
+
+        <!-- Soal 8 -->
+        <div class="question-card">
+            <div class="question-title">8. Past Perfect Tense digunakan untuk menyatakan kejadian yang terjadi...</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q8" value="A" required> A. Sekarang saat bicara</label>
+                <label class="option-label"><input type="radio" name="q8" value="B"> B. Di masa depan</label>
+                <label class="option-label"><input type="radio" name="q8" value="C"> C. Lebih dulu sebelum kejadian lain di masa lalu</label>
+                <label class="option-label"><input type="radio" name="q8" value="D"> D. Setiap hari secara rutin</label>
+            </div>
+        </div>
+
+        <!-- Soal 9 -->
+        <div class="question-card">
+            <div class="question-title">9. Kata kerja bentuk ke-3 (V3) dari kata "eat" adalah...</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q9" value="A" required> A. Ate</label>
+                <label class="option-label"><input type="radio" name="q9" value="B"> B. Eating</label>
+                <label class="option-label"><input type="radio" name="q9" value="C"> C. Eaten</label>
+                <label class="option-label"><input type="radio" name="q9" value="D"> D. Eats</label>
+            </div>
+        </div>
+
+        <!-- Soal 10 -->
+        <div class="question-card">
+            <div class="question-title">10. Bentuk negatif dari "She had finished" adalah...</div>
+            <div class="options">
+                <label class="option-label"><input type="radio" name="q10" value="A" required> A. She had not finished</label>
+                <label class="option-label"><input type="radio" name="q10" value="B"> B. She has not finish</label>
+                <label class="option-label"><input type="radio" name="q10" value="C"> C. She did not finished</label>
+                <label class="option-label"><input type="radio" name="q10" value="D"> D. She is not finish</label>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn">
+            🚀 Kirim Jawaban ke WhatsApp
+        </button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('quizForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const name = document.getElementById('userName').value.trim();
+        if(!name) {
+            alert('Silakan isi nama kamu terlebih dahulu!');
+            return;
+        }
+
+        const answers = {};
+        for (let i = 1; i <= 10; i++) {
+            const selected = document.querySelector(`input[name="q${i}"]:checked`);
+            answers[`Soal ${i}`] = selected ? selected.value : '-';
+        }
+
+        // Kunci Jawaban
+        const key = {
+            'q1': 'B', 'q2': 'A', 'q3': 'C', 'q4': 'A', 'q5': 'B',
+            'q6': 'A', 'q7': 'B', 'q8': 'C', 'q9': 'C', 'q10': 'A'
+        };
+
+        let score = 0;
+        for (let i = 1; i <= 10; i++) {
+            if (answers[`Soal ${i}`] === key[`q${i}`]) {
+                score += 10;
+            }
+        }
+
+        // Format pesan WhatsApp
+        let message = `*HASIL KUIS PAST PERFECT TENSE*\n`;
+        message += `----------------------------------\n`;
+        message += `👤 *Nama:* ${name}\n`;
+        message += `📊 *Skor:* ${score} / 100\n\n`;
+        message += `*Rincian Jawaban:*\n`;
+
+        for (let i = 1; i <= 10; i++) {
+            message += `${i}. ${answers[`Soal ${i}`]}\n`;
+        }
+
+        const phoneNumber = "628811078080"; // 08811078080 -> 628811078080
+        const encodedMessage = encodeURIComponent(message);
+        const waUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+        window.open(waUrl, '_blank');
+    });
+</script>
+
+</body>
+</html>
