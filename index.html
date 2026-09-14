@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Kuis Past Perfect Tense</title>
     <style>
         :root {
@@ -13,6 +13,14 @@
             --card-background: #ffffff;
             --text-color: #333333;
             --border-radius: 12px;
+        }
+
+        /* Proteksi dasar dari proteksi teks */
+        * {
+            -webkit-user-select: none; /* Safari */
+            -ms-user-select: none; /* IE 10 and Consumer */
+            user-select: none; /* Standard syntax */
+            -webkit-touch-callout: none; /* Disable long-press popup on iOS/Android */
         }
 
         body {
@@ -42,8 +50,19 @@
         .subtitle {
             text-align: center;
             color: #777;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
             font-size: 0.95rem;
+        }
+
+        .warning-banner {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            border: 1px solid #ffeeba;
+            text-align: center;
         }
 
         .user-info {
@@ -140,13 +159,70 @@
         .submit-btn:hover {
             background-color: #1eb857;
         }
+
+        /* Overlay Peringatan Pindah Tab */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .overlay-content {
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #2c3e50;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .overlay h2 {
+            color: #e74c3c;
+            margin-top: 0;
+        }
+
+        .overlay button {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-weight: bold;
+        }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
+
+<div class="overlay" id="warningOverlay">
+    <div class="overlay-content">
+        <h2>⚠️ DILARANG PINDAH TAB / APLIKASI!</h2>
+        <p>Anda terdeteksi meninggalkan halaman kuis. Pelanggaran dicatat dalam laporan akhir!</p>
+        <p>Jumlah Pelanggaran: <strong id="violationCount">0</strong></p>
+        <button onclick="dismissWarning()">Kembali Kerjakan Kuis</button>
+    </div>
+</div>
 
 <div class="container">
     <h1>Kuis Past Perfect Tense</h1>
     <p class="subtitle">Pilih nama kamu, jawab 10 soal berikut, lalu kirim hasilnya via WhatsApp!</p>
+    
+    <div class="warning-banner">
+        🔒 <strong>Aturan Anti-Curang:</strong> Pindah tab/aplikasi, copy-paste, dan screenshot/Google Lens telah dinonaktifkan.
+    </div>
 
     <form id="quizForm">
         <div class="user-info">
@@ -166,7 +242,7 @@
                 <option value="Hamzah Aufaa Ibrahim">Hamzah Aufaa Ibrahim</option>
                 <option value="Ikbar Qaisar Arfarassyidan">Ikbar Qaisar Arfarassyidan</option>
                 <option value="Keanu Ibrahim Al Faris">Keanu Ibrahim Al Faris</option>
-                <option value="Moch Abdul Malik Arasyid">Moch Abdul Malik Arasyid</option>
+                <option value="Moch Abdul Malik Arsyid">Moch Abdul Malik Arsyid</option>
                 <option value="Muhammad Alif alhafidz">Muhammad Alif alhafidz</option>
                 <option value="Muhammad Aysar Rizqin">Muhammad Aysar Rizqin</option>
                 <option value="Muhammad Taqiyyurohman Alfawwaz">Muhammad Taqiyyurohman Alfawwaz</option>
@@ -293,6 +369,45 @@
 </div>
 
 <script>
+    let tabSwitchCount = 0;
+
+    // Detection of tab/window switching
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            tabSwitchCount++;
+            document.getElementById('violationCount').innerText = tabSwitchCount;
+            document.getElementById('warningOverlay').style.display = 'block';
+        }
+    });
+
+    window.addEventListener('blur', function() {
+        tabSwitchCount++;
+        document.getElementById('violationCount').innerText = tabSwitchCount;
+        document.getElementById('warningOverlay').style.display = 'block';
+    });
+
+    function dismissWarning() {
+        document.getElementById('warningOverlay').style.display = 'none';
+    }
+
+    // Block right-click (Disable context menu / Lens search)
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        alert('Fitur klik kanan / Google Lens dinonaktifkan demi kejujuran kuis.');
+    });
+
+    // Block keyboard shortcuts for copy/paste/inspection
+    document.addEventListener('keydown', function(e) {
+        // Disable Ctrl+C, Ctrl+U, Ctrl+Shift+I, PrintScreen, etc.
+        if (e.ctrlKey && (e.key === 'c' || e.key === 'C' || e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S')) {
+            e.preventDefault();
+        }
+        if (e.keyCode === 44) { // PrintScreen
+            e.preventDefault();
+        }
+    });
+
+    // Form submission logic
     document.getElementById('quizForm').addEventListener('submit', function(e) {
         e.preventDefault();
 
@@ -321,11 +436,12 @@
             }
         }
 
-        // Format pesan WhatsApp
+        // Format pesan WhatsApp dengan laporan pelanggaran
         let message = `*HASIL KUIS PAST PERFECT TENSE*\n`;
         message += `----------------------------------\n`;
         message += `👤 *Nama:* ${name}\n`;
-        message += `📊 *Skor:* ${score} / 100\n\n`;
+        message += `📊 *Skor:* ${score} / 100\n`;
+        message += `⚠️ *Deteksi Pindah Tab/Aplikasi:* ${tabSwitchCount} kali\n\n`;
         message += `*Rincian Jawaban:*\n`;
 
         for (let i = 1; i <= 10; i++) {
