@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kuis Past Perfect Tense</title>
     <style>
-        /* Desain Modern & Bersih */
         :root {
             --primary: #4F46E5;
             --primary-hover: #4338CA;
@@ -25,7 +24,7 @@
             margin: 0;
             padding: 20px;
             
-            /* Anti-Lens: Mencegah teks bisa di-blok/highlight */
+            /* Anti-Lens & Anti-Block Teks */
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
@@ -68,10 +67,6 @@
             background-color: white;
         }
 
-        select:focus {
-            border-color: var(--primary);
-        }
-
         button {
             width: 100%;
             background-color: var(--primary);
@@ -94,7 +89,6 @@
             cursor: not-allowed;
         }
 
-        /* Tampilan Soal */
         .question-block {
             margin-bottom: 20px;
             padding: 15px;
@@ -117,8 +111,6 @@
             border: 1px solid #D1D5DB;
             border-radius: 6px;
             cursor: pointer;
-            font-weight: normal;
-            transition: background 0.2s;
         }
 
         .options label:hover {
@@ -134,7 +126,6 @@
             display: none;
         }
 
-        /* Peringatan Alt-Tab */
         #warning-banner {
             display: none;
             background-color: #EF4444;
@@ -154,12 +145,10 @@
         }
     </style>
 </head>
-<!-- Mencegah Klik Kanan -->
 <body oncontextmenu="return false;" ondragstart="return false;" ondrop="return false;">
 
     <div class="container">
-        
-        <div id="warning-banner">⚠️ TERDETEKSI PINDAH APLIKASI/TAB! (Peringatan ke-<span id="cheat-count">0</span>)</div>
+        <div id="warning-banner">⚠️ TERDETEKSI PINDAH TAB! (Peringatan ke-<span id="cheat-count">0</span>)</div>
 
         <!-- Bagian 1: Pilih Nama -->
         <div id="login-section">
@@ -203,66 +192,147 @@
 
         <!-- Bagian 3: Loading -->
         <div id="loading-section">
-            <p class="loading-text">⏳ Sedang mengirim jawabanmu ke guru...</p>
+            <p class="loading-text">⏳ Sedang mengirim jawabanmu...</p>
         </div>
 
-        <!-- Bagian 4: Hasil Terkirim -->
+        <!-- Bagian 4: Hasil -->
         <div id="result-section">
             <h2>✅ Berhasil!</h2>
-            <p style="text-align: center; font-size: 16px; margin-bottom: 20px;">
-                Jawaban atas nama <strong id="result-name"></strong> telah berhasil dikirim ke server. <br><br>
-                Terima kasih telah mengerjakan kuis dengan jujur!
+            <p style="text-align: center; font-size: 16px;">
+                Jawaban atas nama <strong id="result-name"></strong> telah dikirim. <br><br>
+                Terima kasih telah mengerjakan kuis!
             </p>
         </div>
     </div>
 
     <script>
-        // URL Google Spreadsheet milikmu
+        // URL Google Spreadsheet
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqxCASYBYvIXVGOR0dLMWZh4909j00YonhQRuP8TQDdkfT1CapJ8R6odLSJSOQni3p/exec";
 
-        // Bank Soal Past Perfect Tense (10 Soal)
+        // Bank Soal
         const bankSoal = [
-            { q: "By the time the teacher arrived, the students _____ their homework.", options: ["finished", "had finished", "have finished", "are finishing"], answer: "had finished" },
-            { q: "She couldn't buy the ticket because she _____ her wallet.", options: ["has lost", "was losing", "had lost", "lost"], answer: "had lost" },
-            { q: "I _____ the movie before, so I didn't want to watch it again.", options: ["had seen", "Wah, maaf banget ya! Maklum, kadang sistemku suka *nge-blank* sedetik. Oke, ingatanku sudah kembali sepenuhnya. Kita sedang bahas **Past Perfect Tense**, dan kamu minta kalimatnya dibuat *spesifik banget* pakai daftar nama ini. 
+            { q: "By the time the teacher arrived, the students _____ their homework.", options: ["finished", "had finished", "have finished"], answer: "had finished" },
+            { q: "She couldn't buy the ticket because she _____ her wallet.", options: ["has lost", "was losing", "had lost"], answer: "had lost" },
+            { q: "I _____ the movie before, so I didn't want to watch it again.", options: ["had seen", "have seen", "saw"], answer: "had seen" },
+            { q: "They _____ for hours before the bus finally arrived.", options: ["had waited", "wait", "has waited"], answer: "had waited" },
+            { q: "When I reached the station, the train _____.", options: ["had left", "has left", "leaves"], answer: "had left" },
+            { q: "He _____ his breakfast when I came to his house.", options: ["eats", "have eaten", "had eaten"], answer: "had eaten" },
+            { q: "The mechanic fixed the car after we _____ him.", options: ["had paid", "paid", "has paid"], answer: "had paid" },
+            { q: "She _____ the report before the meeting started.", options: ["had finished", "finishes", "has finished"], answer: "had finished" },
+            { q: "My mother _____ the floor when I dropped the glass.", options: ["sweeps", "had swept", "has swept"], answer: "had swept" },
+            { q: "By 2020, he _____ in London for five years.", options: ["had lived", "lives", "has lived"], answer: "had lived" }
+        ];
 
-Sebagai pengingat singkat, Past Perfect Tense digunakan untuk menceritakan kejadian yang **sudah selesai** di masa lalu sebelum kejadian lain terjadi (Rumus: **Subject + had + Verb 3**).
+        let cheatCounter = 0;
+        let isExamActive = false;
+        let studentName = "";
 
-Berikut adalah contoh kalimat Past Perfect super spesifik menggunakan semua nama yang kamu berikan:
+        // Deteksi Alt-Tab
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden && isExamActive) {
+                cheatCounter++;
+                document.getElementById('cheat-count').innerText = cheatCounter;
+                document.getElementById('warning-banner').style.display = "block";
+            }
+        });
 
-### Contoh Kalimat Past Perfect (Beserta Artinya)
+        // Fungsi Mulai Kuis
+        function startQuiz() {
+            const selectElement = document.getElementById('student-name');
+            studentName = selectElement.value;
 
-*   **Adzanta Anandapa Rusata** had already submitted his final physics project before the teacher announced the deadline extension.
-    *(Adzanta Anandapa Rusata sudah mengumpulkan tugas akhir fisikanya sebelum guru mengumumkan perpanjangan tenggat waktu.)*
-*   By the time **Akram Arrosyid** arrived at the train station, the express train to Jakarta had departed for twenty minutes.
-    *(Pada saat Akram Arrosyid tiba di stasiun kereta, kereta ekspres ke Jakarta sudah berangkat selama dua puluh menit.)*
-*   **Al Fathir Yugi Pratama** realized he had left his favorite gaming mouse at home after he reached the internet cafe.
-    *(Al Fathir Yugi Pratama menyadari dia telah meninggalkan mouse gaming kesukaannya di rumah setelah dia sampai di warnet.)*
-*   **Anandha putra Bianka** and **Ar Rasyid Prakasa Pratama** had finished their difficult math homework when the heavy rain suddenly poured.
-    *(Anandha putra Bianka dan Ar Rasyid Prakasa Pratama telah menyelesaikan PR matematika mereka yang sulit ketika hujan lebat tiba-tiba turun.)*
-*   **Arian Bimo Hidayat** had never tasted authentic matcha tea until he visited Tokyo last December.
-    *(Arian Bimo Hidayat belum pernah mencicipi teh matcha asli sampai dia mengunjungi Tokyo Desember lalu.)*
-*   The coach was upset because **Arkana Abdad Abbasyi** hadn't completed the warm-up routine before the football match began.
-    *(Pelatih kesal karena Arkana Abdad Abbasyi belum menyelesaikan rutinitas pemanasan sebelum pertandingan sepak bola dimulai.)*
-*   **Arya wira hadiputra** had successfully repaired his broken motorcycle by the time **Attar Farras Bardend Ropen** came to pick him up.
-    *(Arya wira hadiputra telah berhasil memperbaiki motornya yang rusak pada saat Attar Farras Bardend Ropen datang untuk menjemputnya.)*
-*   **Hafizh Izzan Ardi Putra** had read the entire mystery novel before the movie adaptation aired on television.
-    *(Hafizh Izzan Ardi Putra telah membaca seluruh novel misteri tersebut sebelum adaptasi filmnya tayang di televisi.)*
-*   **Hamzah Aufaa Ibrahim** had set up the large camping tent when **Ikbar Qaisar Arfarassyidan** finally arrived with the barbecue supplies.
-    *(Hamzah Aufaa Ibrahim telah mendirikan tenda kemah yang besar ketika Ikbar Qaisar Arfarassyidan akhirnya tiba membawa perlengkapan barbekyu.)*
-*   **Keanu Ibrahim Al Faris** felt completely exhausted because he had played basketball with **Moch Abdul Malik Arasyid** for three straight hours.
-    *(Keanu Ibrahim Al Faris merasa sangat kelelahan karena dia telah bermain bola basket bersama Moch Abdul Malik Arasyid selama tiga jam berturut-turut.)*
-*   **Muhammad Alif alhafidz** had perfectly redesigned the school magazine layout before the principal asked for a review.
-    *(Muhammad Alif alhafidz telah mendesain ulang tata letak majalah sekolah dengan sempurna sebelum kepala sekolah meminta peninjauan.)*
-*   **Muhammad Aysar Rizqin** had bought the VIP concert tickets before they were completely sold out online.
-    *(Muhammad Aysar Rizqin telah membeli tiket konser VIP sebelum tiket tersebut benar-benar habis terjual secara daring.)*
-*   **Muhammad Taqiyyurohman Alfawwaz** had memorized all the complex vocabularies before the national English debate competition started.
-    *(Muhammad Taqiyyurohman Alfawwaz telah menghafal semua kosakata yang rumit sebelum kompetisi debat bahasa Inggris tingkat nasional dimulai.)*
-*   **Nararya Irsyad Kelana** had double-checked the monthly financial report before he sent it to the committee manager.
-    *(Nararya Irsyad Kelana telah memeriksa ulang laporan keuangan bulanan sebelum dia mengirimkannya ke manajer panitia.)*
-*   **Rafael Rayhan Hafidz** had gone to bed early because he had promised **Rafandra Aqlan Lazuardi** to go jogging at 5 AM.
-    *(Rafael Rayhan Hafidz telah tidur lebih awal karena dia telah berjanji kepada Rafandra Aqlan Lazuardi untuk pergi joging pada jam 5 pagi.)*
+            if (studentName === "") {
+                alert("Harap pilih nama kamu terlebih dahulu dari daftar!");
+                return;
+            }
 
----
+            document.getElementById('login-section').style.display = "none";
+            document.getElementById('quiz-section').style.display = "block";
+            document.getElementById('welcome-text').innerText = "Selamat Mengerjakan, " + studentName;
+            
+            isExamActive = true;
+            renderQuestions();
+        }
 
-Gimana, kalimatnya sudah cukup spesifik dan mewakili semua nama di atas? Dari semua contoh di atas, ada yang mau kita jadikan percakapan penuh atau mau coba buat bentuk negatif/pertanyaannya?
+        // Render HTML Soal
+        function renderQuestions() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = "";
+
+            bankSoal.forEach((soal, index) => {
+                let optionsHtml = "";
+                soal.options.forEach((opt) => {
+                    optionsHtml += `
+                        <label>
+                            <input type="radio" name="q${index}" value="${opt}"> 
+                            ${opt}
+                        </label>
+                    `;
+                });
+
+                container.innerHTML += `
+                    <div class="question-block">
+                        <div class="question-text">${index + 1}. ${soal.q}</div>
+                        <div class="options">${optionsHtml}</div>
+                    </div>
+                `;
+            });
+        }
+
+        // Fungsi Kirim Kuis
+        function submitQuiz() {
+            const btnSubmit = document.getElementById('btn-submit');
+            btnSubmit.disabled = true;
+
+            let skorTotal = 0;
+            let detailJawaban = [];
+
+            // Cek jawaban
+            bankSoal.forEach((soal, index) => {
+                const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+                const val = selectedOption ? selectedOption.value : "Kosong";
+                
+                if (val === soal.answer) {
+                    skorTotal += (100 / bankSoal.length);
+                }
+                detailJawaban.push(`Soal ${index + 1}: ${val}`);
+            });
+
+            skorTotal = Math.round(skorTotal);
+            isExamActive = false; // Matikan fitur deteksi curang setelah selesai
+
+            // Ganti tampilan ke Loading
+            document.getElementById('quiz-section').style.display = "none";
+            document.getElementById('warning-banner').style.display = "none";
+            document.getElementById('loading-section').style.display = "block";
+
+            // Siapkan Data ke Google Sheets
+            const dataPayload = {
+                nama: studentName,
+                skor: skorTotal,
+                curang: cheatCounter,
+                detailJawaban: detailJawaban.join(" | ")
+            };
+
+            // Kirim ke Google Apps Script
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(dataPayload)
+            })
+            .then(() => {
+                document.getElementById('loading-section').style.display = "none";
+                document.getElementById('result-section').style.display = "block";
+                document.getElementById('result-name').innerText = studentName;
+            })
+            .catch(error => {
+                alert("Gagal mengirim jawaban. Cek koneksi internetmu.");
+                document.getElementById('loading-section').style.display = "none";
+                document.getElementById('quiz-section').style.display = "block";
+                btnSubmit.disabled = false;
+            });
+        }
+    </script>
+</body>
+</html>
