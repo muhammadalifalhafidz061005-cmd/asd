@@ -3,224 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kuis Past Perfect Tense</title>
+    <title>Sistem Ujian Online</title>
     <style>
+        /* 1. CSS MODERN & BERSIH */
+        :root {
+            --primary-color: #4F46E5;
+            --primary-hover: #4338CA;
+            --bg-color: #F3F4F6;
+            --card-bg: #FFFFFF;
+            --text-main: #1F2937;
+            --text-muted: #6B7280;
+        }
+
         * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* 2. ANTI GOOGLE LENS & COPY PASTE */
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            
+            /* Mencegah text di-highlight untuk di-scan Lens */
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
-            user-select: none;
-            box-sizing: border-box;
+            user-select: none; 
         }
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f9;
-            margin: 0;
-            padding: 20px;
-        }
+
         .container {
-            max-width: 650px;
-            margin: 0 auto;
-            background: #ffffff;
-            padding: 25px;
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 600px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            transition: all 0.3s ease;
         }
+
         h2 {
             text-align: center;
-            color: #2c3e50;
-        }
-        .input-group {
             margin-bottom: 20px;
+            color: var(--primary-color);
         }
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
+
+        .form-group {
+            margin-bottom: 15px;
         }
+
         input[type="text"] {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
+            padding: 12px;
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
             font-size: 16px;
-            -webkit-user-select: text;
-            user-select: text;
+            outline: none;
+            transition: border-color 0.2s;
         }
-        .question {
+
+        input[type="text"]:focus {
+            border-color: var(--primary-color);
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .question-block {
             margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
+            padding: 15px;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            background: #F9FAFB;
         }
-        .question p {
+
+        .question-text {
             font-weight: 600;
             margin-bottom: 10px;
         }
+
         .options label {
-            font-weight: normal;
             display: block;
             padding: 8px 12px;
-            background: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 6px;
             margin-bottom: 8px;
+            background: white;
+            border: 1px solid #D1D5DB;
+            border-radius: 6px;
             cursor: pointer;
+            transition: background 0.2s;
         }
-        .options input {
-            margin-right: 10px;
+
+        .options label:hover {
+            background: #EFF6FF;
         }
-        button {
-            width: 100%;
-            padding: 14px;
-            background-color: #27ae60;
+
+        #quiz-section, #result-section {
+            display: none;
+        }
+
+        /* Styling Peringatan Alt-Tab */
+        #warning-banner {
+            display: none;
+            background-color: #EF4444;
             color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        button:disabled {
-            background-color: #95a5a6;
-            cursor: not-allowed;
-        }
-        #statusMsg {
-            margin-top: 15px;
             text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
             font-weight: bold;
-            font-size: 16px;
         }
     </style>
 </head>
-<body oncontextmenu="return false;">
+<!-- Atribut oncontextmenu untuk mencegah klik kanan (Anti Copy & Lens Desktop) -->
+<body oncontextmenu="return false;" ondragstart="return false;" ondrop="return false;">
 
-<div class="container">
-    <h2>Kuis Past Perfect Tense</h2>
-    
-    <div class="input-group">
-        <label for="namaSiswa">Nama Lengkap:</label>
-        <input type="text" id="namaSiswa" placeholder="Masukkan nama Anda..." autocomplete="off">
+    <div class="container">
+        <!-- Banner Peringatan Kecurangan -->
+        <div id="warning-banner">⚠️ TERDETEKSI PINDAH TAB / ALT-TAB! (Peringatan ke-<span id="cheat-count">0</span>)</div>
+
+        <!-- Section 1: Login Nama -->
+        <div id="login-section">
+            <h2>Masuk Ujian</h2>
+            <div class="form-group">
+                <!-- autocomplete="off" mencegah nama diingat oleh browser -->
+                <input type="text" id="student-name" placeholder="Masukkan Nama Lengkap Anda" autocomplete="off">
+            </div>
+            <button onclick="startQuiz()">Mulai Ujian</button>
+        </div>
+
+        <!-- Section 2: Soal Ujian -->
+        <div id="quiz-section">
+            <h2 id="welcome-text"></h2>
+            <div id="questions-container"></div>
+            <button onclick="submitQuiz()" style="margin-top: 15px;">Kumpulkan Jawaban</button>
+        </div>
+
+        <!-- Section 3: Hasil -->
+        <div id="result-section">
+            <h2>Ujian Selesai</h2>
+            <p style="text-align: center; font-size: 18px; margin-bottom: 20px;">
+                Terima kasih, <strong id="result-name"></strong>.<br>
+                Nilai Anda: <strong id="result-score" style="color: var(--primary-color); font-size: 24px;"></strong>
+            </p>
+            <button onclick="resetApp()">Kembali ke Awal</button>
+        </div>
     </div>
 
-    <form id="quizForm">
-        <!-- Soal 1 -->
-        <div class="question">
-            <p>1. By the time the teacher arrived, the students _____ their homework.</p>
-            <div class="options">
-                <label><input type="radio" name="q1" value="A"> A) finished</label>
-                <label><input type="radio" name="q1" value="B"> B) had finished</label>
-                <label><input type="radio" name="q1" value="C"> C) have finished</label>
-            </div>
-        </div>
+    <script>
+        // 3. MENGATASI "SOALNYA DIKIT" (Bank Soal Diperbanyak)
+        const bankSoal = [
+            { q: "Apa ibukota Indonesia?", options: ["Jakarta", "Bandung", "Surabaya", "Medan"], answer: 0 },
+            { q: "Berapa hasil dari 5 x 6?", options: ["20", "25", "30", "35"], answer: 2 },
+            { q: "Siapa penemu lampu pijar?", options: ["Nikola Tesla", "Thomas Alva Edison", "Albert Einstein", "Isaac Newton"], answer: 1 },
+            { q: "Bahasa pemrograman web standar adalah?", options: ["Python", "C++", "HTML/CSS/JS", "Java"], answer: 2 },
+            { q: "Planet terdekat dari matahari adalah?", options: ["Bumi", "Venus", "Merkurius", "Mars"], answer: 2 },
+            { q: "Berapa jumlah warna pada pelangi?", options: ["5", "6", "7", "8"], answer: 2 },
+            { q: "Apa nama benua terluas di dunia?", options: ["Afrika", "Amerika", "Asia", "Eropa"], answer: 2 }
+        ];
 
-        <!-- Soal 2 -->
-        <div class="question">
-            <p>2. She _____ already _____ when I called her.</p>
-            <div class="options">
-                <label><input type="radio" name="q2" value="A"> A) had / slept</label>
-                <label><input type="radio" name="q2" value="B"> B) has / slept</label>
-                <label><input type="radio" name="q2" value="C"> C) was / sleeping</label>
-            </div>
-        </div>
+        let cheatCounter = 0;
+        let isExamActive = false;
 
-        <!-- Soal 3 -->
-        <div class="question">
-            <p>3. They couldn't enter the house because they _____ the key.</p>
-            <div class="options">
-                <label><input type="radio" name="q3" value="A"> A) lost</label>
-                <label><input type="radio" name="q3" value="B"> B) have lost</label>
-                <label><input type="radio" name="q3" value="C"> C) had lost</label>
-            </div>
-        </div>
-
-        <button type="button" id="btnKirim" onclick="submitQuiz()">Kirim Jawaban</button>
-    </form>
-
-    <div id="statusMsg"></div>
-</div>
-
-<script>
-    // URL Web App Google Apps Script
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqxCASYBYvIXVGOR0dLMWZh4909j00YonhQRuP8TQDdkfT1CapJ8R6odLSJSOQni3p/exec";
-
-    // Kunci Jawaban
-    const jawabanBenar = {
-        q1: "B",
-        q2: "A",
-        q3: "C"
-    };
-
-    let jumlahCurang = 0;
-
-    // Deteksi Pindah Tab / Buka Aplikasi Lain
-    document.addEventListener("visibilitychange", function() {
-        if (document.hidden) {
-            jumlahCurang++;
-        }
-    });
-
-    function submitQuiz() {
-        const nama = document.getElementById("namaSiswa").value.trim();
-        const statusDiv = document.getElementById("statusMsg");
-        const btnKirim = document.getElementById("btnKirim");
-
-        if (nama === "") {
-            alert("Harap isi nama lengkap Anda terlebih dahulu!");
-            return;
-        }
-
-        // Hitung Skor
-        let skorTotal = 0;
-        let detailJawaban = [];
-        const totalSoal = Object.keys(jawabanBenar).length;
-
-        for (let i = 1; i <= totalSoal; i++) {
-            const selectedOption = document.querySelector(`input[name="q${i}"]:checked`);
-            const val = selectedOption ? selectedOption.value : "Tidak Diisi";
-            
-            if (val === jawabanBenar[`q${i}`]) {
-                skorTotal += (100 / totalSoal);
+        // 4. MENGATASI "BISA ALT TAB"
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden && isExamActive) {
+                cheatCounter++;
+                document.getElementById('cheat-count').innerText = cheatCounter;
+                document.getElementById('warning-banner').style.display = "block";
+                alert("⚠️ PERINGATAN: Anda terdeteksi melakukan Alt-Tab atau pindah aplikasi! Tindakan ini direkam oleh sistem.");
             }
-            detailJawaban.push(`Soal ${i}: ${val}`);
-        }
+        });
 
-        skorTotal = Math.round(skorTotal);
-
-        // Ubah status tombol agar siswa tidak klik berkali-kali
-        btnKirim.disabled = true;
-        statusDiv.style.color = "#d35400";
-        statusDiv.innerText = "Mengirim jawaban...";
-
-        // Data yang dikirim ke Google Spreadsheet
-        const dataPayload = {
-            nama: nama,
-            skor: skorTotal,
-            curang: jumlahCurang,
-            detailJawaban: detailJawaban.join(", ")
+        // Hapus nama yang mungkin tersimpan di cache/session
+        window.onload = () => {
+            sessionStorage.removeItem("studentName");
+            document.getElementById('student-name').value = "";
         };
 
-        // Kirim data ke Google Sheets di latar belakang
-        fetch(GOOGLE_SCRIPT_URL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dataPayload)
-        })
-        .then(() => {
-            statusDiv.style.color = "#27ae60";
-            statusDiv.innerHTML = "✅ <b>Jawaban Anda berhasil terkirim!</b><br>Terima kasih telah mengerjakan kuis.";
-            document.getElementById("quizForm").style.display = "none";
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            statusDiv.style.color = "#c0392b";
-            statusDiv.innerText = "Gagal mengirim jawaban. Periksa koneksi internet Anda.";
-            btnKirim.disabled = false;
-        });
-    }
-</script>
+        function startQuiz() {
+            const nameInput = document.getElementById('student-name').value.trim();
+            if (!nameInput) {
+                alert("Nama tidak boleh kosong!");
+                return;
+            }
 
+            // Simpan nama di session (hanya untuk sesi ini, hilang jika direfresh)
+            sessionStorage.setItem("studentName", nameInput);
+            document.getElementById('welcome-text').innerText = "Selamat mengerjakan, " + nameInput + "!";
+            
+            document.getElementById('login-section').style.display = "none";
+            document.getElementById('quiz-section').style.display = "block";
+            isExamActive = true;
+
+            renderQuestions();
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = "";
+
+            bankSoal.forEach((soal, index) => {
+                let optionsHtml = "";
+                soal.options.forEach((opt, optIndex) => {
+                    optionsHtml += `
+                        <label>
+                            <input type="radio" name="q${index}" value="${optIndex}"> 
+                            ${opt}
+                        </label>
+                    `;
+                });
+
+                const questionHtml = `
+                    <div class="question-block">
+                        <div class="question-text">${index + 1}. ${soal.q}</div>
+                        <div class="options">${optionsHtml}</div>
+                    </div>
+                `;
+                container.innerHTML += questionHtml;
+            });
+        }
+
+        function submitQuiz() {
+            let score = 0;
+            bankSoal.forEach((soal, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if (selected && parseInt(selected.value) === soal.answer) {
+                    score += (100 / bankSoal.length); // Hitung bobot nilai
+                }
+            });
+
+            isExamActive = false; // Matikan deteksi alt-tab setelah selesai
+            document.getElementById('quiz-section').style.display = "none";
+            document.getElementById('warning-banner').style.display = "none";
+            document.getElementById('result-section').style.display = "block";
+
+            document.getElementById('result-name').innerText = sessionStorage.getItem("studentName");
+            document.getElementById('result-score').innerText = Math.round(score);
+        }
+
+        // 5. MENGATASI "NAMA-NAMANYA INGET"
+        function resetApp() {
+            sessionStorage.removeItem("studentName"); // Bersihkan nama
+            document.getElementById('student-name').value = ""; // Kosongkan input
+            cheatCounter = 0; // Reset cheat counter
+            
+            document.getElementById('result-section').style.display = "none";
+            document.getElementById('login-section').style.display = "block";
+        }
+    </script>
 </body>
 </html>
