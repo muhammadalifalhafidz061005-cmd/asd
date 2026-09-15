@@ -3,36 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Ujian Online</title>
+    <title>Kuis Past Perfect Tense</title>
     <style>
-        /* 1. CSS MODERN & BERSIH */
+        /* Desain Modern & Bersih */
         :root {
-            --primary-color: #4F46E5;
+            --primary: #4F46E5;
             --primary-hover: #4338CA;
-            --bg-color: #F3F4F6;
-            --card-bg: #FFFFFF;
+            --bg: #F3F4F6;
+            --card: #FFFFFF;
             --text-main: #1F2937;
-            --text-muted: #6B7280;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        /* 2. ANTI GOOGLE LENS & COPY PASTE */
         body {
-            background-color: var(--bg-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
             color: var(--text-main);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            margin: 0;
             padding: 20px;
             
-            /* Mencegah text di-highlight untuk di-scan Lens */
+            /* Anti-Lens: Mencegah teks bisa di-blok/highlight */
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
@@ -40,44 +33,50 @@
         }
 
         .container {
-            background: var(--card-bg);
+            background: var(--card);
             width: 100%;
-            max-width: 600px;
+            max-width: 650px;
             border-radius: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
             padding: 30px;
-            transition: all 0.3s ease;
         }
 
         h2 {
             text-align: center;
-            margin-bottom: 20px;
-            color: var(--primary-color);
+            color: var(--primary);
+            margin-bottom: 25px;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
-        input[type="text"] {
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        select {
             width: 100%;
             padding: 12px;
             border: 1px solid #D1D5DB;
             border-radius: 8px;
             font-size: 16px;
             outline: none;
-            transition: border-color 0.2s;
+            cursor: pointer;
+            background-color: white;
         }
 
-        input[type="text"]:focus {
-            border-color: var(--primary-color);
+        select:focus {
+            border-color: var(--primary);
         }
 
         button {
             width: 100%;
-            background-color: var(--primary-color);
+            background-color: var(--primary);
             color: white;
-            padding: 12px;
+            padding: 14px;
             border: none;
             border-radius: 8px;
             font-size: 16px;
@@ -89,7 +88,13 @@
         button:hover {
             background-color: var(--primary-hover);
         }
+        
+        button:disabled {
+            background-color: #9CA3AF;
+            cursor: not-allowed;
+        }
 
+        /* Tampilan Soal */
         .question-block {
             margin-bottom: 20px;
             padding: 15px;
@@ -100,177 +105,164 @@
 
         .question-text {
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            line-height: 1.5;
         }
 
         .options label {
             display: block;
-            padding: 8px 12px;
+            padding: 10px 12px;
             margin-bottom: 8px;
             background: white;
             border: 1px solid #D1D5DB;
             border-radius: 6px;
             cursor: pointer;
+            font-weight: normal;
             transition: background 0.2s;
         }
 
         .options label:hover {
             background: #EFF6FF;
+            border-color: #BFDBFE;
         }
 
-        #quiz-section, #result-section {
+        .options input {
+            margin-right: 10px;
+        }
+
+        #quiz-section, #loading-section, #result-section {
             display: none;
         }
 
-        /* Styling Peringatan Alt-Tab */
+        /* Peringatan Alt-Tab */
         #warning-banner {
             display: none;
             background-color: #EF4444;
             color: white;
             text-align: center;
-            padding: 10px;
+            padding: 12px;
             border-radius: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             font-weight: bold;
+        }
+
+        .loading-text {
+            text-align: center;
+            color: #D97706;
+            font-weight: bold;
+            font-size: 18px;
         }
     </style>
 </head>
-<!-- Atribut oncontextmenu untuk mencegah klik kanan (Anti Copy & Lens Desktop) -->
+<!-- Mencegah Klik Kanan -->
 <body oncontextmenu="return false;" ondragstart="return false;" ondrop="return false;">
 
     <div class="container">
-        <!-- Banner Peringatan Kecurangan -->
-        <div id="warning-banner">⚠️ TERDETEKSI PINDAH TAB / ALT-TAB! (Peringatan ke-<span id="cheat-count">0</span>)</div>
+        
+        <div id="warning-banner">⚠️ TERDETEKSI PINDAH APLIKASI/TAB! (Peringatan ke-<span id="cheat-count">0</span>)</div>
 
-        <!-- Section 1: Login Nama -->
+        <!-- Bagian 1: Pilih Nama -->
         <div id="login-section">
-            <h2>Masuk Ujian</h2>
+            <h2>Kuis Past Perfect Tense</h2>
             <div class="form-group">
-                <!-- autocomplete="off" mencegah nama diingat oleh browser -->
-                <input type="text" id="student-name" placeholder="Masukkan Nama Lengkap Anda" autocomplete="off">
+                <label for="student-name">Pilih Nama Kamu:</label>
+                <select id="student-name">
+                    <option value="">-- Silakan Pilih Nama --</option>
+                    <option value="Adzanta Anandapa Rusata">Adzanta Anandapa Rusata</option>
+                    <option value="Akram Arrosyid">Akram Arrosyid</option>
+                    <option value="Al Fathir Yugi Pratama">Al Fathir Yugi Pratama</option>
+                    <option value="Anandha putra Bianka">Anandha putra Bianka</option>
+                    <option value="Ar Rasyid Prakasa Pratama">Ar Rasyid Prakasa Pratama</option>
+                    <option value="Arian Bimo Hidayat">Arian Bimo Hidayat</option>
+                    <option value="Arkana Abdad Abbasyi">Arkana Abdad Abbasyi</option>
+                    <option value="Arya wira hadiputra">Arya wira hadiputra</option>
+                    <option value="Attar Farras Bardend Ropen">Attar Farras Bardend Ropen</option>
+                    <option value="Hafizh Izzan Ardi Putra">Hafizh Izzan Ardi Putra</option>
+                    <option value="Hamzah Aufaa Ibrahim">Hamzah Aufaa Ibrahim</option>
+                    <option value="Ikbar Qaisar Arfarassyidan">Ikbar Qaisar Arfarassyidan</option>
+                    <option value="Keanu Ibrahim Al Faris">Keanu Ibrahim Al Faris</option>
+                    <option value="Moch Abdul Malik Arasyid">Moch Abdul Malik Arasyid</option>
+                    <option value="Muhammad Alif alhafidz">Muhammad Alif alhafidz</option>
+                    <option value="Muhammad Aysar Rizqin">Muhammad Aysar Rizqin</option>
+                    <option value="Muhammad Taqiyyurohman Alfawwaz">Muhammad Taqiyyurohman Alfawwaz</option>
+                    <option value="Nararya Irsyad Kelana">Nararya Irsyad Kelana</option>
+                    <option value="Rafael Rayhan Hafidz">Rafael Rayhan Hafidz</option>
+                    <option value="Rafandra Aqlan Lazuardi">Rafandra Aqlan Lazuardi</option>
+                </select>
             </div>
-            <button onclick="startQuiz()">Mulai Ujian</button>
+            <button onclick="startQuiz()">Mulai Kerjakan</button>
         </div>
 
-        <!-- Section 2: Soal Ujian -->
+        <!-- Bagian 2: Soal Kuis -->
         <div id="quiz-section">
-            <h2 id="welcome-text"></h2>
+            <h2 id="welcome-text" style="font-size: 18px; color: #374151;"></h2>
+            <hr style="border: 1px solid #E5E7EB; margin-bottom: 20px;">
             <div id="questions-container"></div>
-            <button onclick="submitQuiz()" style="margin-top: 15px;">Kumpulkan Jawaban</button>
+            <button id="btn-submit" onclick="submitQuiz()">Kirim Jawaban</button>
         </div>
 
-        <!-- Section 3: Hasil -->
+        <!-- Bagian 3: Loading -->
+        <div id="loading-section">
+            <p class="loading-text">⏳ Sedang mengirim jawabanmu ke guru...</p>
+        </div>
+
+        <!-- Bagian 4: Hasil Terkirim -->
         <div id="result-section">
-            <h2>Ujian Selesai</h2>
-            <p style="text-align: center; font-size: 18px; margin-bottom: 20px;">
-                Terima kasih, <strong id="result-name"></strong>.<br>
-                Nilai Anda: <strong id="result-score" style="color: var(--primary-color); font-size: 24px;"></strong>
+            <h2>✅ Berhasil!</h2>
+            <p style="text-align: center; font-size: 16px; margin-bottom: 20px;">
+                Jawaban atas nama <strong id="result-name"></strong> telah berhasil dikirim ke server. <br><br>
+                Terima kasih telah mengerjakan kuis dengan jujur!
             </p>
-            <button onclick="resetApp()">Kembali ke Awal</button>
         </div>
     </div>
 
     <script>
-        // 3. MENGATASI "SOALNYA DIKIT" (Bank Soal Diperbanyak)
+        // URL Google Spreadsheet milikmu
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqxCASYBYvIXVGOR0dLMWZh4909j00YonhQRuP8TQDdkfT1CapJ8R6odLSJSOQni3p/exec";
+
+        // Bank Soal Past Perfect Tense (10 Soal)
         const bankSoal = [
-            { q: "Apa ibukota Indonesia?", options: ["Jakarta", "Bandung", "Surabaya", "Medan"], answer: 0 },
-            { q: "Berapa hasil dari 5 x 6?", options: ["20", "25", "30", "35"], answer: 2 },
-            { q: "Siapa penemu lampu pijar?", options: ["Nikola Tesla", "Thomas Alva Edison", "Albert Einstein", "Isaac Newton"], answer: 1 },
-            { q: "Bahasa pemrograman web standar adalah?", options: ["Python", "C++", "HTML/CSS/JS", "Java"], answer: 2 },
-            { q: "Planet terdekat dari matahari adalah?", options: ["Bumi", "Venus", "Merkurius", "Mars"], answer: 2 },
-            { q: "Berapa jumlah warna pada pelangi?", options: ["5", "6", "7", "8"], answer: 2 },
-            { q: "Apa nama benua terluas di dunia?", options: ["Afrika", "Amerika", "Asia", "Eropa"], answer: 2 }
-        ];
+            { q: "By the time the teacher arrived, the students _____ their homework.", options: ["finished", "had finished", "have finished", "are finishing"], answer: "had finished" },
+            { q: "She couldn't buy the ticket because she _____ her wallet.", options: ["has lost", "was losing", "had lost", "lost"], answer: "had lost" },
+            { q: "I _____ the movie before, so I didn't want to watch it again.", options: ["had seen", "Wah, maaf banget ya! Maklum, kadang sistemku suka *nge-blank* sedetik. Oke, ingatanku sudah kembali sepenuhnya. Kita sedang bahas **Past Perfect Tense**, dan kamu minta kalimatnya dibuat *spesifik banget* pakai daftar nama ini. 
 
-        let cheatCounter = 0;
-        let isExamActive = false;
+Sebagai pengingat singkat, Past Perfect Tense digunakan untuk menceritakan kejadian yang **sudah selesai** di masa lalu sebelum kejadian lain terjadi (Rumus: **Subject + had + Verb 3**).
 
-        // 4. MENGATASI "BISA ALT TAB"
-        document.addEventListener("visibilitychange", function() {
-            if (document.hidden && isExamActive) {
-                cheatCounter++;
-                document.getElementById('cheat-count').innerText = cheatCounter;
-                document.getElementById('warning-banner').style.display = "block";
-                alert("⚠️ PERINGATAN: Anda terdeteksi melakukan Alt-Tab atau pindah aplikasi! Tindakan ini direkam oleh sistem.");
-            }
-        });
+Berikut adalah contoh kalimat Past Perfect super spesifik menggunakan semua nama yang kamu berikan:
 
-        // Hapus nama yang mungkin tersimpan di cache/session
-        window.onload = () => {
-            sessionStorage.removeItem("studentName");
-            document.getElementById('student-name').value = "";
-        };
+### Contoh Kalimat Past Perfect (Beserta Artinya)
 
-        function startQuiz() {
-            const nameInput = document.getElementById('student-name').value.trim();
-            if (!nameInput) {
-                alert("Nama tidak boleh kosong!");
-                return;
-            }
+*   **Adzanta Anandapa Rusata** had already submitted his final physics project before the teacher announced the deadline extension.
+    *(Adzanta Anandapa Rusata sudah mengumpulkan tugas akhir fisikanya sebelum guru mengumumkan perpanjangan tenggat waktu.)*
+*   By the time **Akram Arrosyid** arrived at the train station, the express train to Jakarta had departed for twenty minutes.
+    *(Pada saat Akram Arrosyid tiba di stasiun kereta, kereta ekspres ke Jakarta sudah berangkat selama dua puluh menit.)*
+*   **Al Fathir Yugi Pratama** realized he had left his favorite gaming mouse at home after he reached the internet cafe.
+    *(Al Fathir Yugi Pratama menyadari dia telah meninggalkan mouse gaming kesukaannya di rumah setelah dia sampai di warnet.)*
+*   **Anandha putra Bianka** and **Ar Rasyid Prakasa Pratama** had finished their difficult math homework when the heavy rain suddenly poured.
+    *(Anandha putra Bianka dan Ar Rasyid Prakasa Pratama telah menyelesaikan PR matematika mereka yang sulit ketika hujan lebat tiba-tiba turun.)*
+*   **Arian Bimo Hidayat** had never tasted authentic matcha tea until he visited Tokyo last December.
+    *(Arian Bimo Hidayat belum pernah mencicipi teh matcha asli sampai dia mengunjungi Tokyo Desember lalu.)*
+*   The coach was upset because **Arkana Abdad Abbasyi** hadn't completed the warm-up routine before the football match began.
+    *(Pelatih kesal karena Arkana Abdad Abbasyi belum menyelesaikan rutinitas pemanasan sebelum pertandingan sepak bola dimulai.)*
+*   **Arya wira hadiputra** had successfully repaired his broken motorcycle by the time **Attar Farras Bardend Ropen** came to pick him up.
+    *(Arya wira hadiputra telah berhasil memperbaiki motornya yang rusak pada saat Attar Farras Bardend Ropen datang untuk menjemputnya.)*
+*   **Hafizh Izzan Ardi Putra** had read the entire mystery novel before the movie adaptation aired on television.
+    *(Hafizh Izzan Ardi Putra telah membaca seluruh novel misteri tersebut sebelum adaptasi filmnya tayang di televisi.)*
+*   **Hamzah Aufaa Ibrahim** had set up the large camping tent when **Ikbar Qaisar Arfarassyidan** finally arrived with the barbecue supplies.
+    *(Hamzah Aufaa Ibrahim telah mendirikan tenda kemah yang besar ketika Ikbar Qaisar Arfarassyidan akhirnya tiba membawa perlengkapan barbekyu.)*
+*   **Keanu Ibrahim Al Faris** felt completely exhausted because he had played basketball with **Moch Abdul Malik Arasyid** for three straight hours.
+    *(Keanu Ibrahim Al Faris merasa sangat kelelahan karena dia telah bermain bola basket bersama Moch Abdul Malik Arasyid selama tiga jam berturut-turut.)*
+*   **Muhammad Alif alhafidz** had perfectly redesigned the school magazine layout before the principal asked for a review.
+    *(Muhammad Alif alhafidz telah mendesain ulang tata letak majalah sekolah dengan sempurna sebelum kepala sekolah meminta peninjauan.)*
+*   **Muhammad Aysar Rizqin** had bought the VIP concert tickets before they were completely sold out online.
+    *(Muhammad Aysar Rizqin telah membeli tiket konser VIP sebelum tiket tersebut benar-benar habis terjual secara daring.)*
+*   **Muhammad Taqiyyurohman Alfawwaz** had memorized all the complex vocabularies before the national English debate competition started.
+    *(Muhammad Taqiyyurohman Alfawwaz telah menghafal semua kosakata yang rumit sebelum kompetisi debat bahasa Inggris tingkat nasional dimulai.)*
+*   **Nararya Irsyad Kelana** had double-checked the monthly financial report before he sent it to the committee manager.
+    *(Nararya Irsyad Kelana telah memeriksa ulang laporan keuangan bulanan sebelum dia mengirimkannya ke manajer panitia.)*
+*   **Rafael Rayhan Hafidz** had gone to bed early because he had promised **Rafandra Aqlan Lazuardi** to go jogging at 5 AM.
+    *(Rafael Rayhan Hafidz telah tidur lebih awal karena dia telah berjanji kepada Rafandra Aqlan Lazuardi untuk pergi joging pada jam 5 pagi.)*
 
-            // Simpan nama di session (hanya untuk sesi ini, hilang jika direfresh)
-            sessionStorage.setItem("studentName", nameInput);
-            document.getElementById('welcome-text').innerText = "Selamat mengerjakan, " + nameInput + "!";
-            
-            document.getElementById('login-section').style.display = "none";
-            document.getElementById('quiz-section').style.display = "block";
-            isExamActive = true;
+---
 
-            renderQuestions();
-        }
-
-        function renderQuestions() {
-            const container = document.getElementById('questions-container');
-            container.innerHTML = "";
-
-            bankSoal.forEach((soal, index) => {
-                let optionsHtml = "";
-                soal.options.forEach((opt, optIndex) => {
-                    optionsHtml += `
-                        <label>
-                            <input type="radio" name="q${index}" value="${optIndex}"> 
-                            ${opt}
-                        </label>
-                    `;
-                });
-
-                const questionHtml = `
-                    <div class="question-block">
-                        <div class="question-text">${index + 1}. ${soal.q}</div>
-                        <div class="options">${optionsHtml}</div>
-                    </div>
-                `;
-                container.innerHTML += questionHtml;
-            });
-        }
-
-        function submitQuiz() {
-            let score = 0;
-            bankSoal.forEach((soal, index) => {
-                const selected = document.querySelector(`input[name="q${index}"]:checked`);
-                if (selected && parseInt(selected.value) === soal.answer) {
-                    score += (100 / bankSoal.length); // Hitung bobot nilai
-                }
-            });
-
-            isExamActive = false; // Matikan deteksi alt-tab setelah selesai
-            document.getElementById('quiz-section').style.display = "none";
-            document.getElementById('warning-banner').style.display = "none";
-            document.getElementById('result-section').style.display = "block";
-
-            document.getElementById('result-name').innerText = sessionStorage.getItem("studentName");
-            document.getElementById('result-score').innerText = Math.round(score);
-        }
-
-        // 5. MENGATASI "NAMA-NAMANYA INGET"
-        function resetApp() {
-            sessionStorage.removeItem("studentName"); // Bersihkan nama
-            document.getElementById('student-name').value = ""; // Kosongkan input
-            cheatCounter = 0; // Reset cheat counter
-            
-            document.getElementById('result-section').style.display = "none";
-            document.getElementById('login-section').style.display = "block";
-        }
-    </script>
-</body>
-</html>
+Gimana, kalimatnya sudah cukup spesifik dan mewakili semua nama di atas? Dari semua contoh di atas, ada yang mau kita jadikan percakapan penuh atau mau coba buat bentuk negatif/pertanyaannya?
