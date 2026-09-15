@@ -8,14 +8,28 @@
         :root {
             --primary: #4F46E5;
             --primary-hover: #4338CA;
-            --bg: #F3F4F6;
+            --primary-light: #EEF2FF;
+            --bg: #EEF2F7;
             --card: #FFFFFF;
             --text-main: #1F2937;
+            --text-soft: #6B7280;
+            --border: #E5E7EB;
+            --success: #10B981;
+            --danger: #EF4444;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
+            background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 50%, #F5F3FF 100%);
+            background-attachment: fixed;
             color: var(--text-main);
             display: flex;
             justify-content: center;
@@ -23,6 +37,8 @@
             min-height: 100vh;
             margin: 0;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
             
             /* Anti-Lens & Anti-Block Teks */
             -webkit-user-select: none;
@@ -31,110 +47,241 @@
             user-select: none; 
         }
 
+        /* Dekorasi blob di background */
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            z-index: 0;
+            pointer-events: none;
+        }
+        body::before {
+            width: 400px;
+            height: 400px;
+            background: #A5B4FC;
+            top: -120px;
+            left: -120px;
+            animation: floatBlob 14s ease-in-out infinite;
+        }
+        body::after {
+            width: 360px;
+            height: 360px;
+            background: #C4B5FD;
+            bottom: -120px;
+            right: -120px;
+            animation: floatBlob 18s ease-in-out infinite reverse;
+        }
+
+        @keyframes floatBlob {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50%      { transform: translate(30px, -30px) scale(1.1); }
+        }
+
         .container {
+            position: relative;
+            z-index: 1;
             background: var(--card);
             width: 100%;
             max-width: 650px;
-            border-radius: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            padding: 30px;
+            border-radius: 20px;
+            box-shadow:
+                0 20px 40px -15px rgba(79, 70, 229, 0.25),
+                0 8px 20px -10px rgba(0, 0, 0, 0.08);
+            padding: 36px 34px;
+            animation: cardIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(24px) scale(0.98); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         h2 {
             text-align: center;
             color: var(--primary);
-            margin-bottom: 25px;
+            margin: 0 0 25px;
+            font-size: 24px;
+            letter-spacing: -0.3px;
+            animation: fadeSlide 0.5s ease both;
+        }
+
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(-10px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         .form-group {
             margin-bottom: 20px;
+            animation: fadeSlide 0.5s 0.05s ease both;
         }
 
         label {
             font-weight: bold;
             display: block;
             margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-main);
         }
 
         select {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #D1D5DB;
-            border-radius: 8px;
+            padding: 14px 16px;
+            border: 1.5px solid #D1D5DB;
+            border-radius: 12px;
             font-size: 16px;
             outline: none;
             cursor: pointer;
             background-color: white;
+            transition: border-color 0.25s, box-shadow 0.25s, transform 0.15s;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234F46E5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 18px;
+            padding-right: 42px;
+        }
+
+        select:hover {
+            border-color: #A5B4FC;
+        }
+
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
         }
 
         button {
             width: 100%;
-            background-color: var(--primary);
+            background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
             color: white;
-            padding: 14px;
+            padding: 15px;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: transform 0.15s, box-shadow 0.25s, background 0.3s;
+            box-shadow: 0 8px 18px -8px rgba(79, 70, 229, 0.7);
+            letter-spacing: 0.3px;
+            animation: fadeSlide 0.5s 0.1s ease both;
         }
 
         button:hover {
-            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 22px -8px rgba(79, 70, 229, 0.85);
+            background: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%);
+        }
+
+        button:active {
+            transform: translateY(0) scale(0.99);
         }
         
         button:disabled {
-            background-color: #9CA3AF;
+            background: #9CA3AF;
             cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
         }
 
         .question-block {
             margin-bottom: 20px;
-            padding: 15px;
-            border: 1px solid #E5E7EB;
-            border-radius: 8px;
-            background: #F9FAFB;
+            padding: 18px 20px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: linear-gradient(180deg, #FAFBFF 0%, #F9FAFB 100%);
+            animation: qBlockIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+            transition: box-shadow 0.3s, border-color 0.3s;
+        }
+
+        .question-block:hover {
+            border-color: #C7D2FE;
+            box-shadow: 0 8px 18px -12px rgba(79, 70, 229, 0.4);
+        }
+
+        @keyframes qBlockIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         .question-text {
             font-weight: 600;
-            margin-bottom: 12px;
-            line-height: 1.5;
+            margin-bottom: 14px;
+            line-height: 1.6;
+            font-size: 15px;
         }
 
         .options label {
-            display: block;
-            padding: 10px 12px;
-            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            padding: 12px 14px;
+            margin-bottom: 10px;
             background: white;
-            border: 1px solid #D1D5DB;
-            border-radius: 6px;
+            border: 1.5px solid #D1D5DB;
+            border-radius: 10px;
             cursor: pointer;
+            font-weight: 500;
+            font-size: 15px;
+            transition: background 0.2s, border-color 0.2s, transform 0.15s, box-shadow 0.2s;
         }
 
         .options label:hover {
-            background: #EFF6FF;
-            border-color: #BFDBFE;
+            background: var(--primary-light);
+            border-color: #A5B4FC;
+            transform: translateX(3px);
+        }
+
+        .options label:has(input:checked) {
+            background: var(--primary-light);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
         }
 
         .options input {
-            margin-right: 10px;
+            margin-right: 12px;
+            accent-color: var(--primary);
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
         }
 
         #quiz-section, #loading-section, #result-section {
             display: none;
         }
 
+        #quiz-section.active,
+        #loading-section.active,
+        #result-section.active {
+            display: block;
+            animation: fadeSlide 0.5s ease both;
+        }
+
+        #login-section.hidden {
+            display: none;
+        }
+
         #warning-banner {
             display: none;
-            background-color: #EF4444;
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
             color: white;
             text-align: center;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 22px;
             font-weight: bold;
+            box-shadow: 0 10px 20px -10px rgba(239, 68, 68, 0.7);
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%      { transform: translateX(-6px); }
+            40%      { transform: translateX(6px); }
+            60%      { transform: translateX(-4px); }
+            80%      { transform: translateX(4px); }
         }
 
         .loading-text {
@@ -142,7 +289,59 @@
             color: #D97706;
             font-weight: bold;
             font-size: 18px;
+            padding: 20px 0;
         }
+
+        .loading-text::before {
+            content: "";
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            vertical-align: -3px;
+            border: 3px solid #FDE68A;
+            border-top-color: #D97706;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        #result-section h2 {
+            color: var(--success);
+        }
+
+        #result-section p {
+            animation: fadeSlide 0.6s 0.15s ease both;
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+            margin-bottom: 22px;
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 26px 22px; border-radius: 16px; }
+            h2 { font-size: 20px; }
+            .question-text { font-size: 14px; }
+            .options label { font-size: 14px; padding: 11px 12px; }
+        }
+
+        /* Stagger animasi untuk tiap soal */
+        .question-block:nth-child(1) { animation-delay: 0.05s; }
+        .question-block:nth-child(2) { animation-delay: 0.1s; }
+        .question-block:nth-child(3) { animation-delay: 0.15s; }
+        .question-block:nth-child(4) { animation-delay: 0.2s; }
+        .question-block:nth-child(5) { animation-delay: 0.25s; }
+        .question-block:nth-child(6) { animation-delay: 0.3s; }
+        .question-block:nth-child(7) { animation-delay: 0.35s; }
+        .question-block:nth-child(8) { animation-delay: 0.4s; }
+        .question-block:nth-child(9) { animation-delay: 0.45s; }
+        .question-block:nth-child(10) { animation-delay: 0.5s; }
     </style>
 </head>
 <body oncontextmenu="return false;" ondragstart="return false;" ondrop="return false;">
@@ -192,7 +391,7 @@
 
         <!-- Bagian 3: Loading -->
         <div id="loading-section">
-            <p class="loading-text">⏳ Sedang mengirim jawabanmu...</p>
+            <p class="loading-text">Sedang mengirim jawabanmu...</p>
         </div>
 
         <!-- Bagian 4: Hasil -->
@@ -232,7 +431,12 @@
             if (document.hidden && isExamActive) {
                 cheatCounter++;
                 document.getElementById('cheat-count').innerText = cheatCounter;
-                document.getElementById('warning-banner').style.display = "block";
+                const banner = document.getElementById('warning-banner');
+                banner.style.display = "block";
+                // restart animasi shake
+                banner.style.animation = 'none';
+                void banner.offsetWidth;
+                banner.style.animation = 'shake 0.5s ease';
             }
         });
 
@@ -248,6 +452,7 @@
 
             document.getElementById('login-section').style.display = "none";
             document.getElementById('quiz-section').style.display = "block";
+            document.getElementById('quiz-section').classList.add('active');
             document.getElementById('welcome-text').innerText = "Selamat Mengerjakan, " + studentName;
             
             isExamActive = true;
@@ -303,8 +508,10 @@
 
             // Ganti tampilan ke Loading
             document.getElementById('quiz-section').style.display = "none";
+            document.getElementById('quiz-section').classList.remove('active');
             document.getElementById('warning-banner').style.display = "none";
             document.getElementById('loading-section').style.display = "block";
+            document.getElementById('loading-section').classList.add('active');
 
             // Siapkan Data ke Google Sheets
             const dataPayload = {
@@ -323,13 +530,17 @@
             })
             .then(() => {
                 document.getElementById('loading-section').style.display = "none";
+                document.getElementById('loading-section').classList.remove('active');
                 document.getElementById('result-section').style.display = "block";
+                document.getElementById('result-section').classList.add('active');
                 document.getElementById('result-name').innerText = studentName;
             })
             .catch(error => {
                 alert("Gagal mengirim jawaban. Cek koneksi internetmu.");
                 document.getElementById('loading-section').style.display = "none";
+                document.getElementById('loading-section').classList.remove('active');
                 document.getElementById('quiz-section').style.display = "block";
+                document.getElementById('quiz-section').classList.add('active');
                 btnSubmit.disabled = false;
             });
         }
