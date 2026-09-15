@@ -18,13 +18,9 @@
             --danger: #EF4444;
         }
 
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
-        html, body {
-            height: 100%;
-        }
+        html, body { height: 100%; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -39,39 +35,35 @@
             padding: 20px;
             position: relative;
             overflow-x: hidden;
-            
+
             /* Anti-Lens & Anti-Block Teks */
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
-            user-select: none; 
+            user-select: none;
         }
 
-        /* Dekorasi blob di background */
+        /* Dekorasi blob di background (di belakang semua konten) */
         body::before,
         body::after {
             content: "";
             position: fixed;
             border-radius: 50%;
             filter: blur(80px);
-            opacity: 0.5;
-            z-index: 0;
+            opacity: 0.45;
+            z-index: -1;              /* <-- pastikan di belakang */
             pointer-events: none;
         }
         body::before {
-            width: 400px;
-            height: 400px;
+            width: 400px; height: 400px;
             background: #A5B4FC;
-            top: -120px;
-            left: -120px;
+            top: -120px; left: -120px;
             animation: floatBlob 14s ease-in-out infinite;
         }
         body::after {
-            width: 360px;
-            height: 360px;
+            width: 360px; height: 360px;
             background: #C4B5FD;
-            bottom: -120px;
-            right: -120px;
+            bottom: -120px; right: -120px;
             animation: floatBlob 18s ease-in-out infinite reverse;
         }
 
@@ -91,13 +83,13 @@
                 0 20px 40px -15px rgba(79, 70, 229, 0.25),
                 0 8px 20px -10px rgba(0, 0, 0, 0.08);
             padding: 36px 34px;
-            animation: cardIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
             border: 1px solid rgba(255,255,255,0.8);
+            animation: cardIn 0.5s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         @keyframes cardIn {
-            from { opacity: 0; transform: translateY(24px) scale(0.98); }
-            to   { opacity: 1; transform: translateY(0) scale(1); }
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         h2 {
@@ -106,18 +98,9 @@
             margin: 0 0 25px;
             font-size: 24px;
             letter-spacing: -0.3px;
-            animation: fadeSlide 0.5s ease both;
         }
 
-        @keyframes fadeSlide {
-            from { opacity: 0; transform: translateY(-10px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            animation: fadeSlide 0.5s 0.05s ease both;
-        }
+        .form-group { margin-bottom: 20px; }
 
         label {
             font-weight: bold;
@@ -136,7 +119,7 @@
             outline: none;
             cursor: pointer;
             background-color: white;
-            transition: border-color 0.25s, box-shadow 0.25s, transform 0.15s;
+            transition: border-color 0.25s, box-shadow 0.25s;
             appearance: none;
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234F46E5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat;
@@ -144,15 +127,8 @@
             background-size: 18px;
             padding-right: 42px;
         }
-
-        select:hover {
-            border-color: #A5B4FC;
-        }
-
-        select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
-        }
+        select:hover  { border-color: #A5B4FC; }
+        select:focus  { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15); }
 
         button {
             width: 100%;
@@ -167,19 +143,13 @@
             transition: transform 0.15s, box-shadow 0.25s, background 0.3s;
             box-shadow: 0 8px 18px -8px rgba(79, 70, 229, 0.7);
             letter-spacing: 0.3px;
-            animation: fadeSlide 0.5s 0.1s ease both;
         }
-
         button:hover {
             transform: translateY(-2px);
             box-shadow: 0 12px 22px -8px rgba(79, 70, 229, 0.85);
             background: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%);
         }
-
-        button:active {
-            transform: translateY(0) scale(0.99);
-        }
-        
+        button:active  { transform: translateY(0) scale(0.99); }
         button:disabled {
             background: #9CA3AF;
             cursor: not-allowed;
@@ -193,18 +163,11 @@
             border: 1px solid var(--border);
             border-radius: 14px;
             background: linear-gradient(180deg, #FAFBFF 0%, #F9FAFB 100%);
-            animation: qBlockIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
             transition: box-shadow 0.3s, border-color 0.3s;
         }
-
         .question-block:hover {
             border-color: #C7D2FE;
             box-shadow: 0 8px 18px -12px rgba(79, 70, 229, 0.4);
-        }
-
-        @keyframes qBlockIn {
-            from { opacity: 0; transform: translateY(16px); }
-            to   { opacity: 1; transform: translateY(0); }
         }
 
         .question-text {
@@ -227,19 +190,16 @@
             font-size: 15px;
             transition: background 0.2s, border-color 0.2s, transform 0.15s, box-shadow 0.2s;
         }
-
         .options label:hover {
             background: var(--primary-light);
             border-color: #A5B4FC;
             transform: translateX(3px);
         }
-
         .options label:has(input:checked) {
             background: var(--primary-light);
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
         }
-
         .options input {
             margin-right: 12px;
             accent-color: var(--primary);
@@ -248,20 +208,7 @@
             cursor: pointer;
         }
 
-        #quiz-section, #loading-section, #result-section {
-            display: none;
-        }
-
-        #quiz-section.active,
-        #loading-section.active,
-        #result-section.active {
-            display: block;
-            animation: fadeSlide 0.5s ease both;
-        }
-
-        #login-section.hidden {
-            display: none;
-        }
+        #quiz-section, #loading-section, #result-section { display: none; }
 
         #warning-banner {
             display: none;
@@ -275,7 +222,6 @@
             box-shadow: 0 10px 20px -10px rgba(239, 68, 68, 0.7);
             animation: shake 0.5s ease;
         }
-
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             20%      { transform: translateX(-6px); }
@@ -291,12 +237,10 @@
             font-size: 18px;
             padding: 20px 0;
         }
-
         .loading-text::before {
             content: "";
             display: inline-block;
-            width: 20px;
-            height: 20px;
+            width: 20px; height: 20px;
             margin-right: 10px;
             vertical-align: -3px;
             border: 3px solid #FDE68A;
@@ -304,18 +248,9 @@
             border-radius: 50%;
             animation: spin 0.9s linear infinite;
         }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        #result-section h2 {
-            color: var(--success);
-        }
-
-        #result-section p {
-            animation: fadeSlide 0.6s 0.15s ease both;
-        }
+        #result-section h2 { color: var(--success); }
 
         hr {
             border: none;
@@ -331,17 +266,14 @@
             .options label { font-size: 14px; padding: 11px 12px; }
         }
 
-        /* Stagger animasi untuk tiap soal */
-        .question-block:nth-child(1) { animation-delay: 0.05s; }
-        .question-block:nth-child(2) { animation-delay: 0.1s; }
-        .question-block:nth-child(3) { animation-delay: 0.15s; }
-        .question-block:nth-child(4) { animation-delay: 0.2s; }
-        .question-block:nth-child(5) { animation-delay: 0.25s; }
-        .question-block:nth-child(6) { animation-delay: 0.3s; }
-        .question-block:nth-child(7) { animation-delay: 0.35s; }
-        .question-block:nth-child(8) { animation-delay: 0.4s; }
-        .question-block:nth-child(9) { animation-delay: 0.45s; }
-        .question-block:nth-child(10) { animation-delay: 0.5s; }
+        /* Hormati preferensi aksesibilitas */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001ms !important;
+            }
+        }
     </style>
 </head>
 <body oncontextmenu="return false;" ondragstart="return false;" ondrop="return false;">
@@ -452,9 +384,8 @@
 
             document.getElementById('login-section').style.display = "none";
             document.getElementById('quiz-section').style.display = "block";
-            document.getElementById('quiz-section').classList.add('active');
             document.getElementById('welcome-text').innerText = "Selamat Mengerjakan, " + studentName;
-            
+
             isExamActive = true;
             renderQuestions();
         }
@@ -496,7 +427,7 @@
             bankSoal.forEach((soal, index) => {
                 const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
                 const val = selectedOption ? selectedOption.value : "Kosong";
-                
+
                 if (val === soal.answer) {
                     skorTotal += (100 / bankSoal.length);
                 }
@@ -508,10 +439,8 @@
 
             // Ganti tampilan ke Loading
             document.getElementById('quiz-section').style.display = "none";
-            document.getElementById('quiz-section').classList.remove('active');
             document.getElementById('warning-banner').style.display = "none";
             document.getElementById('loading-section').style.display = "block";
-            document.getElementById('loading-section').classList.add('active');
 
             // Siapkan Data ke Google Sheets
             const dataPayload = {
@@ -530,17 +459,13 @@
             })
             .then(() => {
                 document.getElementById('loading-section').style.display = "none";
-                document.getElementById('loading-section').classList.remove('active');
                 document.getElementById('result-section').style.display = "block";
-                document.getElementById('result-section').classList.add('active');
                 document.getElementById('result-name').innerText = studentName;
             })
             .catch(error => {
                 alert("Gagal mengirim jawaban. Cek koneksi internetmu.");
                 document.getElementById('loading-section').style.display = "none";
-                document.getElementById('loading-section').classList.remove('active');
                 document.getElementById('quiz-section').style.display = "block";
-                document.getElementById('quiz-section').classList.add('active');
                 btnSubmit.disabled = false;
             });
         }
