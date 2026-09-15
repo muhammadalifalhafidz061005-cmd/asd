@@ -2,458 +2,224 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kuis Past Perfect Tense</title>
     <style>
-        :root {
-            --primary-color: #4a90e2;
-            --secondary-color: #2c3e50;
-            --success-color: #2ecc71;
-            --background-color: #f4f7f6;
-            --card-background: #ffffff;
-            --text-color: #333333;
-            --border-radius: 12px;
-        }
-
-        /* Proteksi dasar dari proteksi teks */
         * {
-            -webkit-user-select: none; /* Safari */
-            -ms-user-select: none; /* IE 10 and Consumer */
-            user-select: none; /* Standard syntax */
-            -webkit-touch-callout: none; /* Disable long-press popup on iOS/Android */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            box-sizing: border-box;
         }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.6;
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
             margin: 0;
             padding: 20px;
         }
-
         .container {
-            max-width: 700px;
+            max-width: 650px;
             margin: 0 auto;
-            background: var(--card-background);
-            padding: 30px;
-            border-radius: var(--border-radius);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-
-        h1 {
+        h2 {
             text-align: center;
-            color: var(--secondary-color);
+            color: #2c3e50;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
             margin-bottom: 5px;
         }
-
-        .subtitle {
-            text-align: center;
-            color: #777;
-            margin-bottom: 15px;
-            font-size: 0.95rem;
-        }
-
-        .warning-banner {
-            background-color: #fff3cd;
-            color: #856404;
-            padding: 10px 15px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            margin-bottom: 20px;
-            border: 1px solid #ffeeba;
-            text-align: center;
-        }
-
-        .user-info {
-            background-color: #eef5fc;
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            border-left: 4px solid var(--primary-color);
-        }
-
-        .user-info label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: var(--secondary-color);
-        }
-
-        .user-info select {
+        input[type="text"] {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             border: 1px solid #ccc;
             border-radius: 6px;
-            font-size: 1rem;
-            box-sizing: border-box;
-            background-color: #fff;
-            color: var(--text-color);
-            cursor: pointer;
+            font-size: 16px;
+            -webkit-user-select: text;
+            user-select: text;
         }
-
-        .question-card {
-            background: #fff;
-            border: 1px solid #e0e0e0;
-            padding: 18px 20px;
-            border-radius: 8px;
+        .question {
             margin-bottom: 20px;
-            transition: border-color 0.2s;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
         }
-
-        .question-card:hover {
-            border-color: var(--primary-color);
-        }
-
-        .question-title {
+        .question p {
             font-weight: 600;
-            margin-bottom: 12px;
-            color: var(--secondary-color);
+            margin-bottom: 10px;
         }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .option-label {
-            display: flex;
-            align-items: center;
-            padding: 10px 14px;
-            border: 1px solid #eee;
+        .options label {
+            font-weight: normal;
+            display: block;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
             border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .option-label:hover {
-            background-color: #f8f9fa;
-        }
-
-        .option-label input {
-            margin-right: 12px;
-            width: 18px;
-            height: 18px;
+            margin-bottom: 8px;
             cursor: pointer;
         }
-
-        .submit-btn {
+        .options input {
+            margin-right: 10px;
+        }
+        button {
             width: 100%;
-            background-color: #25D366;
-            color: white;
             padding: 14px;
-            font-size: 1.1rem;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
             font-weight: bold;
-            border: none;
-            border-radius: var(--border-radius);
             cursor: pointer;
-            transition: background-color 0.3s;
-            margin-top: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
         }
-
-        .submit-btn:hover {
-            background-color: #1eb857;
+        button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
         }
-
-        /* Overlay Peringatan Pindah Tab */
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
-            z-index: 9999;
-            color: white;
-            text-align: center;
-            padding: 40px 20px;
-            box-sizing: border-box;
-        }
-
-        .overlay-content {
-            position: relative;
-            top: 50%;
-            transform: translateY(-50%);
-            background: #2c3e50;
-            padding: 30px;
-            border-radius: 12px;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        .overlay h2 {
-            color: #e74c3c;
-            margin-top: 0;
-        }
-
-        .overlay button {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 1rem;
-            border-radius: 6px;
-            cursor: pointer;
+        #statusMsg {
             margin-top: 15px;
+            text-align: center;
             font-weight: bold;
+            font-size: 16px;
         }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-<div class="overlay" id="warningOverlay">
-    <div class="overlay-content">
-        <h2>⚠️ DILARANG PINDAH TAB / APLIKASI!</h2>
-        <p>Anda terdeteksi meninggalkan halaman kuis. Pelanggaran dicatat dalam laporan akhir!</p>
-        <p>Jumlah Pelanggaran: <strong id="violationCount">0</strong></p>
-        <button onclick="dismissWarning()">Kembali Kerjakan Kuis</button>
-    </div>
-</div>
-
 <div class="container">
-    <h1>Kuis Past Perfect Tense</h1>
-    <p class="subtitle">Pilih nama kamu, jawab 10 soal berikut, lalu kirim hasilnya via WhatsApp!</p>
+    <h2>Kuis Past Perfect Tense</h2>
     
-    <div class="warning-banner">
-        🔒 <strong>Aturan Anti-Curang:</strong> Pindah tab/aplikasi, copy-paste, dan screenshot/Google Lens telah dinonaktifkan.
+    <div class="input-group">
+        <label for="namaSiswa">Nama Lengkap:</label>
+        <input type="text" id="namaSiswa" placeholder="Masukkan nama Anda..." autocomplete="off">
     </div>
 
     <form id="quizForm">
-        <div class="user-info">
-            <label for="userName">Pilih Nama Kamu:</label>
-            <select id="userName" required>
-                <option value="" disabled selected>-- Pilih Nama dari Daftar --</option>
-                <option value="Adzanta Anandapa Rusata">Adzanta Anandapa Rusata</option>
-                <option value="Akram Arrosyid">Akram Arrosyid</option>
-                <option value="Al Fathir Yugi Pratama">Al Fathir Yugi Pratama</option>
-                <option value="Anandha putra Bianka">Anandha putra Bianka</option>
-                <option value="Ar Rasyid Prakasa Pratama">Ar Rasyid Prakasa Pratama</option>
-                <option value="Arian Bimo Hidayat">Arian Bimo Hidayat</option>
-                <option value="Arkana Abdad Abbasyi">Arkana Abdad Abbasyi</option>
-                <option value="Arya wira hadiputra">Arya wira hadiputra</option>
-                <option value="Attar Farras Bardend Ropen">Attar Farras Bardend Ropen</option>
-                <option value="Hafizh Izzan Ardi Putra">Hafizh Izzan Ardi Putra</option>
-                <option value="Hamzah Aufaa Ibrahim">Hamzah Aufaa Ibrahim</option>
-                <option value="Ikbar Qaisar Arfarassyidan">Ikbar Qaisar Arfarassyidan</option>
-                <option value="Keanu Ibrahim Al Faris">Keanu Ibrahim Al Faris</option>
-                <option value="Moch Abdul Malik Arsyid">Moch Abdul Malik Arsyid</option>
-                <option value="Muhammad Alif alhafidz">Muhammad Alif alhafidz</option>
-                <option value="Muhammad Aysar Rizqin">Muhammad Aysar Rizqin</option>
-                <option value="Muhammad Taqiyyurohman Alfawwaz">Muhammad Taqiyyurohman Alfawwaz</option>
-                <option value="Nararya Irsyad Kelana">Nararya Irsyad Kelana</option>
-                <option value="Rafael Rayhan Hafidz">Rafael Rayhan Hafidz</option>
-                <option value="Rafandra Aqlan Lazuardi">Rafandra Aqlan Lazuardi</option>
-            </select>
-        </div>
-
         <!-- Soal 1 -->
-        <div class="question-card">
-            <div class="question-title">1. By the time I arrived, they _____ (leave).</div>
+        <div class="question">
+            <p>1. By the time the teacher arrived, the students _____ their homework.</p>
             <div class="options">
-                <label class="option-label"><input type="radio" name="q1" value="A" required> A. have left</label>
-                <label class="option-label"><input type="radio" name="q1" value="B"> B. had left</label>
-                <label class="option-label"><input type="radio" name="q1" value="C"> C. has leave</label>
-                <label class="option-label"><input type="radio" name="q1" value="D"> D. is leaving</label>
+                <label><input type="radio" name="q1" value="A"> A) finished</label>
+                <label><input type="radio" name="q1" value="B"> B) had finished</label>
+                <label><input type="radio" name="q1" value="C"> C) have finished</label>
             </div>
         </div>
 
         <!-- Soal 2 -->
-        <div class="question-card">
-            <div class="question-title">2. She was tired because she _____ (not sleep) well.</div>
+        <div class="question">
+            <p>2. She _____ already _____ when I called her.</p>
             <div class="options">
-                <label class="option-label"><input type="radio" name="q2" value="A" required> A. had not slept</label>
-                <label class="option-label"><input type="radio" name="q2" value="B"> B. has not sleep</label>
-                <label class="option-label"><input type="radio" name="q2" value="C"> C. is not sleeping</label>
-                <label class="option-label"><input type="radio" name="q2" value="D"> D. was not sleep</label>
+                <label><input type="radio" name="q2" value="A"> A) had / slept</label>
+                <label><input type="radio" name="q2" value="B"> B) has / slept</label>
+                <label><input type="radio" name="q2" value="C"> C) was / sleeping</label>
             </div>
         </div>
 
         <!-- Soal 3 -->
-        <div class="question-card">
-            <div class="question-title">3. We _____ (finish) dinner before the guests came.</div>
+        <div class="question">
+            <p>3. They couldn't enter the house because they _____ the key.</p>
             <div class="options">
-                <label class="option-label"><input type="radio" name="q3" value="A" required> A. finish</label>
-                <label class="option-label"><input type="radio" name="q3" value="B"> B. has finished</label>
-                <label class="option-label"><input type="radio" name="q3" value="C"> C. had finished</label>
-                <label class="option-label"><input type="radio" name="q3" value="D"> D. are finishing</label>
+                <label><input type="radio" name="q3" value="A"> A) lost</label>
+                <label><input type="radio" name="q3" value="B"> B) have lost</label>
+                <label><input type="radio" name="q3" value="C"> C) had lost</label>
             </div>
         </div>
 
-        <!-- Soal 4 -->
-        <div class="question-card">
-            <div class="question-title">4. The film _____ (start) when he entered the cinema.</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q4" value="A" required> A. had started</label>
-                <label class="option-label"><input type="radio" name="q4" value="B"> B. starting</label>
-                <label class="option-label"><input type="radio" name="q4" value="C"> C. has start</label>
-                <label class="option-label"><input type="radio" name="q4" value="D"> D. started</label>
-            </div>
-        </div>
-
-        <!-- Soal 5 -->
-        <div class="question-card">
-            <div class="question-title">5. Rumus umum untuk bentuk Positif Past Perfect Tense adalah...</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q5" value="A" required> A. Subject + Has + V2</label>
-                <label class="option-label"><input type="radio" name="q5" value="B"> B. Subject + Had + V3</label>
-                <label class="option-label"><input type="radio" name="q5" value="C"> C. Subject + Is + V-ing</label>
-                <label class="option-label"><input type="radio" name="q5" value="D"> D. Subject + Have + V1</label>
-            </div>
-        </div>
-
-        <!-- Soal 6 -->
-        <div class="question-card">
-            <div class="question-title">6. When I called her, she _____ (go) out.</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q6" value="A" required> A. had gone</label>
-                <label class="option-label"><input type="radio" name="q6" value="B"> B. had went</label>
-                <label class="option-label"><input type="radio" name="q6" value="C"> C. has go</label>
-                <label class="option-label"><input type="radio" name="q6" value="D"> D. was went</label>
-            </div>
-        </div>
-
-        <!-- Soal 7 -->
-        <div class="question-card">
-            <div class="question-title">7. I had eaten dinner _____ I watched TV.</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q7" value="A" required> A. after</label>
-                <label class="option-label"><input type="radio" name="q7" value="B"> B. before</label>
-                <label class="option-label"><input type="radio" name="q7" value="C"> C. while</label>
-                <label class="option-label"><input type="radio" name="q7" value="D"> D. because</label>
-            </div>
-        </div>
-
-        <!-- Soal 8 -->
-        <div class="question-card">
-            <div class="question-title">8. Past Perfect Tense digunakan untuk menyatakan kejadian yang terjadi...</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q8" value="A" required> A. Sekarang saat bicara</label>
-                <label class="option-label"><input type="radio" name="q8" value="B"> B. Di masa depan</label>
-                <label class="option-label"><input type="radio" name="q8" value="C"> C. Lebih dulu sebelum kejadian lain di masa lalu</label>
-                <label class="option-label"><input type="radio" name="q8" value="D"> D. Setiap hari secara rutin</label>
-            </div>
-        </div>
-
-        <!-- Soal 9 -->
-        <div class="question-card">
-            <div class="question-title">9. Kata kerja bentuk ke-3 (V3) dari kata "eat" adalah...</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q9" value="A" required> A. Ate</label>
-                <label class="option-label"><input type="radio" name="q9" value="B"> B. Eating</label>
-                <label class="option-label"><input type="radio" name="q9" value="C"> C. Eaten</label>
-                <label class="option-label"><input type="radio" name="q9" value="D"> D. Eats</label>
-            </div>
-        </div>
-
-        <!-- Soal 10 -->
-        <div class="question-card">
-            <div class="question-title">10. Bentuk negatif dari "She had finished" adalah...</div>
-            <div class="options">
-                <label class="option-label"><input type="radio" name="q10" value="A" required> A. She had not finished</label>
-                <label class="option-label"><input type="radio" name="q10" value="B"> B. She has not finish</label>
-                <label class="option-label"><input type="radio" name="q10" value="C"> C. She did not finished</label>
-                <label class="option-label"><input type="radio" name="q10" value="D"> D. She is not finish</label>
-            </div>
-        </div>
-
-        <button type="submit" class="submit-btn">
-            🚀 Kirim Jawaban ke WhatsApp
-        </button>
+        <button type="button" id="btnKirim" onclick="submitQuiz()">Kirim Jawaban</button>
     </form>
+
+    <div id="statusMsg"></div>
 </div>
 
 <script>
-    let tabSwitchCount = 0;
+    // URL Web App Google Apps Script
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqxCASYBYvIXVGOR0dLMWZh4909j00YonhQRuP8TQDdkfT1CapJ8R6odLSJSOQni3p/exec";
 
-    // Detection of tab/window switching
-    document.addEventListener('visibilitychange', function() {
+    // Kunci Jawaban
+    const jawabanBenar = {
+        q1: "B",
+        q2: "A",
+        q3: "C"
+    };
+
+    let jumlahCurang = 0;
+
+    // Deteksi Pindah Tab / Buka Aplikasi Lain
+    document.addEventListener("visibilitychange", function() {
         if (document.hidden) {
-            tabSwitchCount++;
-            document.getElementById('violationCount').innerText = tabSwitchCount;
-            document.getElementById('warningOverlay').style.display = 'block';
+            jumlahCurang++;
         }
     });
 
-    window.addEventListener('blur', function() {
-        tabSwitchCount++;
-        document.getElementById('violationCount').innerText = tabSwitchCount;
-        document.getElementById('warningOverlay').style.display = 'block';
-    });
+    function submitQuiz() {
+        const nama = document.getElementById("namaSiswa").value.trim();
+        const statusDiv = document.getElementById("statusMsg");
+        const btnKirim = document.getElementById("btnKirim");
 
-    function dismissWarning() {
-        document.getElementById('warningOverlay').style.display = 'none';
-    }
-
-    // Block right-click (Disable context menu / Lens search)
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-        alert('Fitur klik kanan / Google Lens dinonaktifkan demi kejujuran kuis.');
-    });
-
-    // Block keyboard shortcuts for copy/paste/inspection
-    document.addEventListener('keydown', function(e) {
-        // Disable Ctrl+C, Ctrl+U, Ctrl+Shift+I, PrintScreen, etc.
-        if (e.ctrlKey && (e.key === 'c' || e.key === 'C' || e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S')) {
-            e.preventDefault();
-        }
-        if (e.keyCode === 44) { // PrintScreen
-            e.preventDefault();
-        }
-    });
-
-    // Form submission logic
-    document.getElementById('quizForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const name = document.getElementById('userName').value;
-        if(!name) {
-            alert('Silakan pilih nama kamu terlebih dahulu!');
+        if (nama === "") {
+            alert("Harap isi nama lengkap Anda terlebih dahulu!");
             return;
         }
 
-        const answers = {};
-        for (let i = 1; i <= 10; i++) {
-            const selected = document.querySelector(`input[name="q${i}"]:checked`);
-            answers[`Soal ${i}`] = selected ? selected.value : '-';
+        // Hitung Skor
+        let skorTotal = 0;
+        let detailJawaban = [];
+        const totalSoal = Object.keys(jawabanBenar).length;
+
+        for (let i = 1; i <= totalSoal; i++) {
+            const selectedOption = document.querySelector(`input[name="q${i}"]:checked`);
+            const val = selectedOption ? selectedOption.value : "Tidak Diisi";
+            
+            if (val === jawabanBenar[`q${i}`]) {
+                skorTotal += (100 / totalSoal);
+            }
+            detailJawaban.push(`Soal ${i}: ${val}`);
         }
 
-        // Kunci Jawaban
-        const key = {
-            'q1': 'B', 'q2': 'A', 'q3': 'C', 'q4': 'A', 'q5': 'B',
-            'q6': 'A', 'q7': 'B', 'q8': 'C', 'q9': 'C', 'q10': 'A'
+        skorTotal = Math.round(skorTotal);
+
+        // Ubah status tombol agar siswa tidak klik berkali-kali
+        btnKirim.disabled = true;
+        statusDiv.style.color = "#d35400";
+        statusDiv.innerText = "Mengirim jawaban...";
+
+        // Data yang dikirim ke Google Spreadsheet
+        const dataPayload = {
+            nama: nama,
+            skor: skorTotal,
+            curang: jumlahCurang,
+            detailJawaban: detailJawaban.join(", ")
         };
 
-        let score = 0;
-        for (let i = 1; i <= 10; i++) {
-            if (answers[`Soal ${i}`] === key[`q${i}`]) {
-                score += 10;
-            }
-        }
-
-        // Format pesan WhatsApp dengan laporan pelanggaran
-        let message = `*HASIL KUIS PAST PERFECT TENSE*\n`;
-        message += `----------------------------------\n`;
-        message += `👤 *Nama:* ${name}\n`;
-        message += `📊 *Skor:* ${score} / 100\n`;
-        message += `⚠️ *Deteksi Pindah Tab/Aplikasi:* ${tabSwitchCount} kali\n\n`;
-        message += `*Rincian Jawaban:*\n`;
-
-        for (let i = 1; i <= 10; i++) {
-            message += `${i}. ${answers[`Soal ${i}`]}\n`;
-        }
-
-        const phoneNumber = "628811078080";
-        const encodedMessage = encodeURIComponent(message);
-        const waUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-
-        window.open(waUrl, '_blank');
-    });
+        // Kirim data ke Google Sheets di latar belakang
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dataPayload)
+        })
+        .then(() => {
+            statusDiv.style.color = "#27ae60";
+            statusDiv.innerHTML = "✅ <b>Jawaban Anda berhasil terkirim!</b><br>Terima kasih telah mengerjakan kuis.";
+            document.getElementById("quizForm").style.display = "none";
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            statusDiv.style.color = "#c0392b";
+            statusDiv.innerText = "Gagal mengirim jawaban. Periksa koneksi internet Anda.";
+            btnKirim.disabled = false;
+        });
+    }
 </script>
 
 </body>
