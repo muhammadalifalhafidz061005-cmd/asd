@@ -31,7 +31,7 @@
             user-select: none; 
         }
 
-        /* OVERLAY ANTI SPLIT-SCREEN & ALT-TAB */
+        /* OVERLAY ANTI CURANG & WAJIB FULLSCREEN */
         #lock-overlay {
             display: none;
             position: fixed;
@@ -46,6 +46,14 @@
             padding: 20px;
         }
         #lock-overlay h1 { color: #EF4444; font-size: 30px; margin-bottom: 10px; }
+        #btn-resume {
+            margin-top: 25px;
+            background-color: #EF4444;
+            padding: 12px 24px;
+            font-size: 16px;
+            width: auto;
+        }
+        #btn-resume:hover { background-color: #DC2626; }
 
         .container {
             background: var(--card);
@@ -105,6 +113,21 @@
             cursor: not-allowed;
         }
 
+        /* Styling Aturan */
+        .rules-box {
+            background-color: #FEF3C7;
+            border: 1px solid #F59E0B;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #92400E;
+        }
+        .rules-box ul {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+        .rules-box li { margin-bottom: 8px; }
+
         .question-block {
             margin-bottom: 20px;
             padding: 15px;
@@ -138,7 +161,7 @@
             margin-right: 10px;
         }
 
-        #quiz-section, #loading-section, #result-section {
+        #rules-section, #quiz-section, #loading-section, #result-section {
             display: none;
         }
 
@@ -163,15 +186,16 @@
 </head>
 <body oncontextmenu="return false;" ondragstart="return false;" ondrop="return false;">
 
-    <!-- Layar Gelap Anti Curang -->
+    <!-- Layar Gelap Anti Curang / Keluar Fullscreen -->
     <div id="lock-overlay">
         <h1>⚠️ UJIAN DIJEDA</h1>
-        <p>Anda terdeteksi meninggalkan halaman ujian atau membuka tab lain.</p>
+        <p>Anda terdeteksi meninggalkan layar ujian, membuka aplikasi lain, atau keluar dari Mode Layar Penuh.</p>
         <p style="margin-top: 15px; color: #FCA5A5;">(Pelanggaran telah dicatat oleh sistem)</p>
+        <button id="btn-resume" onclick="resumeFullscreen()">Kembali ke Ujian (Wajib Layar Penuh)</button>
     </div>
 
     <div class="container">
-        <div id="warning-banner">⚠️ TERDETEKSI PINDAH TAB/APLIKASI! (Peringatan ke-<span id="cheat-count">0</span>)</div>
+        <div id="warning-banner">⚠️ TERDETEKSI PELANGGARAN LAYAR! (Peringatan ke-<span id="cheat-count">0</span>)</div>
 
         <!-- Bagian 1: Pilih Nama -->
         <div id="login-section">
@@ -202,10 +226,25 @@
                     <option value="Rafandra Aqlan Lazuardi">Rafandra Aqlan Lazuardi</option>
                 </select>
             </div>
-            <button onclick="startQuiz()">Mulai Kerjakan</button>
+            <button onclick="showRules()">Lanjut ke Peraturan</button>
         </div>
 
-        <!-- Bagian 2: Soal Kuis -->
+        <!-- Bagian 2: Peraturan Ujian -->
+        <div id="rules-section">
+            <h2>Peraturan Ujian</h2>
+            <div class="rules-box">
+                <strong>⚠️ Harap baca sebelum memulai:</strong>
+                <ul>
+                    <li>Ujian ini <strong>wajib menggunakan Mode Layar Penuh (Fullscreen)</strong>.</li>
+                    <li>Sistem akan mengunci otomatis jika Anda menekan tombol ESC, mengecilkan browser, membuka tab baru, atau berpindah aplikasi (Alt-Tab).</li>
+                    <li>Fungsi klik kanan, Copy, dan Paste telah dimatikan.</li>
+                    <li>Setiap pelanggaran akan dicatat oleh sistem dan dikirimkan bersama hasil akhir.</li>
+                </ul>
+            </div>
+            <button onclick="startQuizInFullscreen()">Saya Setuju & Mulai Ujian (Fullscreen)</button>
+        </div>
+
+        <!-- Bagian 3: Soal Kuis -->
         <div id="quiz-section">
             <h2 id="welcome-text" style="font-size: 18px; color: #374151;"></h2>
             <hr style="border: 1px solid #E5E7EB; margin-bottom: 20px;">
@@ -213,12 +252,12 @@
             <button id="btn-submit" onclick="submitQuiz()">Kirim Jawaban</button>
         </div>
 
-        <!-- Bagian 3: Loading -->
+        <!-- Bagian 4: Loading -->
         <div id="loading-section">
             <p class="loading-text">⏳ Sedang mengirim jawabanmu...</p>
         </div>
 
-        <!-- Bagian 4: Hasil -->
+        <!-- Bagian 5: Hasil -->
         <div id="result-section">
             <h2>✅ Berhasil!</h2>
             <p style="text-align: center; font-size: 16px;">
@@ -251,9 +290,9 @@
         let studentName = "";
         const lockOverlay = document.getElementById('lock-overlay');
 
-        // --- ANTI CHEAT EKSTREM ---
+        // --- SISTEM DETEKSI CURANG EKSTREM & FULLSCREEN ---
 
-        // 1. Blokir Keyboard (Copy, Paste, Inspect Element, View Source)
+        // 1. Blokir Keyboard Kombinasi Curang
         document.addEventListener('keydown', function(e) {
             if (e.key === 'F12' || 
                (e.ctrlKey && e.shiftKey && e.key === 'I') || 
@@ -265,32 +304,48 @@
             }
         });
 
-        // 2. Cegah fungsi Copy ke Clipboard secara paksa
+        // 2. Blokir Copy/Paste
         document.addEventListener('copy', function(e) {
             e.preventDefault();
             alert("⚠️ Tindakan menyalin teks dilarang keras!");
         });
 
-        // 3. Blackout Layar jika kehilangan fokus (Alt-Tab / Split Screen)
-        window.addEventListener('blur', function() {
+        // 3. Fungsi memicu sanksi pelanggaran (Blackout layar)
+        function triggerCheatPenalty() {
             if (isExamActive) {
                 cheatCounter++;
                 document.getElementById('cheat-count').innerText = cheatCounter;
                 lockOverlay.style.display = 'flex'; 
                 document.getElementById('warning-banner').style.display = "block";
             }
-        });
+        }
 
-        // Kembalikan layar jika user kembali fokus ke web ujian
-        window.addEventListener('focus', function() {
-            if (isExamActive) {
-                lockOverlay.style.display = 'none';
+        // 4. Deteksi Pindah Aplikasi / Alt-Tab (Blur)
+        window.addEventListener('blur', triggerCheatPenalty);
+
+        // 5. Deteksi Keluar dari Mode Fullscreen (Menekan ESC)
+        document.addEventListener("fullscreenchange", function() {
+            // Jika dokumen tidak lagi fullscreen dan ujian masih aktif
+            if (!document.fullscreenElement && isExamActive) {
+                triggerCheatPenalty();
             }
         });
 
-        // --- FUNGSI KUIS ---
+        // 6. Fungsi tombol untuk kembali ke ujian (Wajib re-fullscreen)
+        function resumeFullscreen() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().then(() => {
+                    lockOverlay.style.display = 'none'; // Buka layar jika berhasil fullscreen
+                }).catch(err => {
+                    alert("Gagal masuk mode layar penuh. Anda harus mengizinkannya untuk melanjutkan ujian.");
+                });
+            }
+        }
 
-        function startQuiz() {
+        // --- ALUR HALAMAN UJIAN ---
+
+        function showRules() {
             const selectElement = document.getElementById('student-name');
             studentName = selectElement.value;
 
@@ -300,11 +355,26 @@
             }
 
             document.getElementById('login-section').style.display = "none";
-            document.getElementById('quiz-section').style.display = "block";
-            document.getElementById('welcome-text').innerText = "Selamat Mengerjakan, " + studentName;
+            document.getElementById('rules-section').style.display = "block";
+        }
+
+        function startQuizInFullscreen() {
+            const elem = document.documentElement;
             
-            isExamActive = true;
-            renderQuestions();
+            // Aktifkan Fullscreen
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().then(() => {
+                    // Jika berhasil masuk Fullscreen, tampilkan soal
+                    document.getElementById('rules-section').style.display = "none";
+                    document.getElementById('quiz-section').style.display = "block";
+                    document.getElementById('welcome-text').innerText = "Selamat Mengerjakan, " + studentName;
+                    
+                    isExamActive = true; // Ujian resmi dimulai, deteksi dihidupkan
+                    renderQuestions();
+                }).catch(err => {
+                    alert("Browser menolak Mode Layar Penuh. Pastikan tidak ada ekstensi yang memblokir.");
+                });
+            }
         }
 
         function renderQuestions() {
@@ -349,7 +419,12 @@
             });
 
             skorTotal = Math.round(skorTotal);
-            isExamActive = false; // Matikan deteksi curang agar layar tidak nge-blur saat loading/selesai
+            isExamActive = false; // Matikan deteksi karena kuis sudah dikumpulkan
+
+            // Keluar dari Fullscreen karena kuis sudah selesai
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
 
             document.getElementById('quiz-section').style.display = "none";
             document.getElementById('warning-banner').style.display = "none";
@@ -378,7 +453,6 @@
                 document.getElementById('loading-section').style.display = "none";
                 document.getElementById('quiz-section').style.display = "block";
                 btnSubmit.disabled = false;
-                isExamActive = true; // Nyalakan lagi deteksinya kalau gagal kirim
             });
         }
     </script>
