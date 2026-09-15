@@ -31,6 +31,22 @@
             user-select: none; 
         }
 
+        /* OVERLAY ANTI SPLIT-SCREEN & ALT-TAB */
+        #lock-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            color: white;
+            z-index: 9999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+        #lock-overlay h1 { color: #EF4444; font-size: 30px; margin-bottom: 10px; }
+
         .container {
             background: var(--card);
             width: 100%;
@@ -143,35 +159,19 @@
             font-weight: bold;
             font-size: 18px;
         }
-
-        /* OVERLAY ANTI SPLIT-SCREEN & ALT-TAB */
-#lock-overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.95);
-    color: white;
-    z-index: 9999;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 20px;
-}
-#lock-overlay h1 { color: #EF4444; font-size: 30px; margin-bottom: 10px; }
-        
     </style>
 </head>
 <body oncontextmenu="return false;" ondragstart="return false;" ondrop="return false;">
 
+    <!-- Layar Gelap Anti Curang -->
     <div id="lock-overlay">
-    <h1>⚠️ UJIAN DIJEDA</h1>
-    <p>Anda terdeteksi meninggalkan halaman ujian atau membuka tab lain.</p>
-    <p style="margin-top: 15px; color: #FCA5A5;">(Pelanggaran telah dicatat oleh sistem)</p>
-</div>
-    
+        <h1>⚠️ UJIAN DIJEDA</h1>
+        <p>Anda terdeteksi meninggalkan halaman ujian atau membuka tab lain.</p>
+        <p style="margin-top: 15px; color: #FCA5A5;">(Pelanggaran telah dicatat oleh sistem)</p>
+    </div>
+
     <div class="container">
-        <div id="warning-banner">⚠️ TERDETEKSI PINDAH TAB! (Peringatan ke-<span id="cheat-count">0</span>)</div>
+        <div id="warning-banner">⚠️ TERDETEKSI PINDAH TAB/APLIKASI! (Peringatan ke-<span id="cheat-count">0</span>)</div>
 
         <!-- Bagian 1: Pilih Nama -->
         <div id="login-section">
@@ -223,7 +223,7 @@
             <h2>✅ Berhasil!</h2>
             <p style="text-align: center; font-size: 16px;">
                 Jawaban atas nama <strong id="result-name"></strong> telah dikirim. <br><br>
-                Terima kasih telah mengerjakan kuis!
+                Terima kasih telah mengerjakan kuis dengan jujur!
             </p>
         </div>
     </div>
@@ -249,17 +249,47 @@
         let cheatCounter = 0;
         let isExamActive = false;
         let studentName = "";
+        const lockOverlay = document.getElementById('lock-overlay');
 
-        // Deteksi Alt-Tab
-        document.addEventListener("visibilitychange", function() {
-            if (document.hidden && isExamActive) {
+        // --- ANTI CHEAT EKSTREM ---
+
+        // 1. Blokir Keyboard (Copy, Paste, Inspect Element, View Source)
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || 
+               (e.ctrlKey && e.shiftKey && e.key === 'I') || 
+               (e.ctrlKey && e.key === 'u') || 
+               (e.ctrlKey && e.key === 'c') || 
+               (e.ctrlKey && e.key === 'v')) {
+                e.preventDefault();
+                alert("⚠️ Akses tombol keyboard ini dinonaktifkan!");
+            }
+        });
+
+        // 2. Cegah fungsi Copy ke Clipboard secara paksa
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            alert("⚠️ Tindakan menyalin teks dilarang keras!");
+        });
+
+        // 3. Blackout Layar jika kehilangan fokus (Alt-Tab / Split Screen)
+        window.addEventListener('blur', function() {
+            if (isExamActive) {
                 cheatCounter++;
                 document.getElementById('cheat-count').innerText = cheatCounter;
+                lockOverlay.style.display = 'flex'; 
                 document.getElementById('warning-banner').style.display = "block";
             }
         });
 
-        // Fungsi Mulai Kuis
+        // Kembalikan layar jika user kembali fokus ke web ujian
+        window.addEventListener('focus', function() {
+            if (isExamActive) {
+                lockOverlay.style.display = 'none';
+            }
+        });
+
+        // --- FUNGSI KUIS ---
+
         function startQuiz() {
             const selectElement = document.getElementById('student-name');
             studentName = selectElement.value;
@@ -277,7 +307,6 @@
             renderQuestions();
         }
 
-        // Render HTML Soal
         function renderQuestions() {
             const container = document.getElementById('questions-container');
             container.innerHTML = "";
@@ -302,7 +331,6 @@
             });
         }
 
-        // Fungsi Kirim Kuis
         function submitQuiz() {
             const btnSubmit = document.getElementById('btn-submit');
             btnSubmit.disabled = true;
@@ -310,7 +338,6 @@
             let skorTotal = 0;
             let detailJawaban = [];
 
-            // Cek jawaban
             bankSoal.forEach((soal, index) => {
                 const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
                 const val = selectedOption ? selectedOption.value : "Kosong";
@@ -322,14 +349,12 @@
             });
 
             skorTotal = Math.round(skorTotal);
-            isExamActive = false; // Matikan fitur deteksi curang setelah selesai
+            isExamActive = false; // Matikan deteksi curang agar layar tidak nge-blur saat loading/selesai
 
-            // Ganti tampilan ke Loading
             document.getElementById('quiz-section').style.display = "none";
             document.getElementById('warning-banner').style.display = "none";
             document.getElementById('loading-section').style.display = "block";
 
-            // Siapkan Data ke Google Sheets
             const dataPayload = {
                 nama: studentName,
                 skor: skorTotal,
@@ -337,7 +362,6 @@
                 detailJawaban: detailJawaban.join(" | ")
             };
 
-            // Kirim ke Google Apps Script
             fetch(GOOGLE_SCRIPT_URL, {
                 method: "POST",
                 mode: "no-cors",
@@ -354,6 +378,7 @@
                 document.getElementById('loading-section').style.display = "none";
                 document.getElementById('quiz-section').style.display = "block";
                 btnSubmit.disabled = false;
+                isExamActive = true; // Nyalakan lagi deteksinya kalau gagal kirim
             });
         }
     </script>
